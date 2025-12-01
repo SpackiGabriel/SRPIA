@@ -74,7 +74,7 @@ O ambiente virtual isola as dependências do projeto. Siga as instruções do se
 
 ```bash
 # Navegue até a pasta do projeto
-cd caminho/para/trabalho-final-pdsw
+cd caminho/para/o/repositório
 
 # Crie o ambiente virtual
 python3 -m venv venv
@@ -89,7 +89,7 @@ source venv/bin/activate
 
 ```bash
 # Navegue até a pasta do projeto
-cd caminho\para\trabalho-final-pdsw
+cd caminho\para\o\repositório
 
 # Crie o ambiente virtual
 python -m venv venv
@@ -231,43 +231,3 @@ Depois de fazer login, você verá o **Dashboard** com suas estatísticas e reco
 **"Port already in use"**
 - Outro servidor está rodando na porta 8000
 - Use: `python manage.py runserver 8001` (muda para porta 8001)
-
-## 📖 Documentação Adicional
-
-Para mais detalhes técnicos sobre o comando `populate` e suas opções, consulte:
-- `server/POPULATE_README.md`
-
-## 🎓 Sobre o Projeto
-
-Sistema desenvolvido para facilitar a organização e leitura de papers acadêmicos, especialmente útil para estudantes de pós-graduação, pesquisadores e alunos desenvolvendo TCC na área de IA.
-
----
-
-## ⚡ Resumo Rápido - Instalação em 5 Comandos
-
-```bash
-# 1. Criar e ativar ambiente virtual
-python -m venv venv
-source venv/bin/activate          # Linux/Mac
-# ou: venv\Scripts\activate       # Windows
-
-# 2. Instalar dependências
-pip install django pillow
-
-# 3. Entrar na pasta do servidor e configurar banco
-cd server
-python manage.py migrate
-
-# 4. (Recomendado) Popular com dados de demonstração
-python manage.py populate
-
-# 5. Iniciar o servidor
-python manage.py runserver
-
-# 6. Acessar no navegador: http://localhost:8000/
-# Se executou o populate, use: demo / demo123456
-```
-
----
-
-**SRPIA** - Sistema de Rodízio de Papers de IA © 2024
