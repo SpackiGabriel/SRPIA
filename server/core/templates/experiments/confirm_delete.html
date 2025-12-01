@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir Experimento - SRPIA{% endblock %}
+
+{% block content %}
+<div class="section" style="max-width: 600px; margin: 0 auto;">
+    <div class="card" style="border: 2px solid var(--color-danger-200);">
+        <div class="card-header" style="background: var(--color-danger-50); border-bottom: 1px solid var(--color-danger-200);">
+            <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <div style="width: 48px; height: 48px; background: var(--color-danger-100); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-exclamation-triangle" style="font-size: 24px; color: var(--color-danger-600);"></i>
+                </div>
+                <div>
+                    <h2 class="heading-md" style="margin: 0; color: var(--color-danger-700);">Confirmar Exclusão</h2>
+                    <p class="text-sm text-secondary" style="margin: 0;">Esta ação não pode ser desfeita</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="text-sm" style="margin-bottom: var(--space-4); line-height: 1.6;">
+                Tem certeza que deseja excluir o experimento <strong>"{{ object.title }}"</strong>?
+            </p>
+            
+            <div style="background: var(--color-danger-50); border-left: 3px solid var(--color-danger-500); padding: var(--space-4); border-radius: var(--radius-md); margin-bottom: var(--space-6);">
+                <p class="text-sm" style="margin: 0; color: var(--color-danger-700); font-weight: var(--font-weight-medium);">
+                    <i class="bi bi-info-circle" style="margin-right: var(--space-1);"></i>
+                    Todas as informações sobre este experimento serão permanentemente perdidas.
+                </p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div style="display: flex; gap: var(--space-2); justify-content: flex-end;">
+                    <a href="{% url 'experiment_detail' object.pk %}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i>
+                        Sim, Excluir Permanentemente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Visão geral dos seus papers e progresso de leitura</p>
+        </div>
+        <a href="{% url 'paper_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Novo Paper
+        </a>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="section">
+    <div class="grid grid-cols-4" style="gap: var(--space-4);">
+        <!-- Total Papers -->
+        <div class="card">
+            <div class="card-body" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p class="text-xs text-secondary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">Total de Papers</p>
+                    <p class="display-md" style="margin: 0; color: var(--text-primary);">{{ total_papers }}</p>
+                </div>
+                <div style="width: 48px; height: 48px; background: var(--color-neutral-100); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-file-earmark-text" style="font-size: 24px; color: var(--text-secondary);"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Not Started -->
+        <div class="card">
+            <div class="card-body" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p class="text-xs text-secondary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">Não Iniciados</p>
+                    <p class="display-md" style="margin: 0; color: var(--text-primary);">{{ papers_nao_iniciados }}</p>
+                </div>
+                <div style="width: 48px; height: 48px; background: var(--color-neutral-100); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-circle" style="font-size: 24px; color: var(--text-tertiary);"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress -->
+        <div class="card">
+            <div class="card-body" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p class="text-xs text-secondary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">Em Leitura</p>
+                    <p class="display-md" style="margin: 0; color: var(--color-primary-600);">{{ papers_em_leitura }}</p>
+                </div>
+                <div style="width: 48px; height: 48px; background: var(--color-primary-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-book-half" style="font-size: 24px; color: var(--color-primary-600);"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed -->
+        <div class="card">
+            <div class="card-body" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p class="text-xs text-secondary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">Lidos</p>
+                    <p class="display-md" style="margin: 0; color: var(--color-success-600);">{{ papers_lidos }}</p>
+                </div>
+                <div style="width: 48px; height: 48px; background: var(--color-success-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-check-circle" style="font-size: 24px; color: var(--color-success-600);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Next Papers to Read -->
+<div class="section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="bi bi-stars"></i>
+            Próximos Papers Recomendados
+        </h2>
+        <a href="{% url 'paper_list' %}" class="btn btn-ghost btn-sm">
+            Ver todos
+            <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    {% if next_papers %}
+    <div class="card">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">#</th>
+                        <th>Título</th>
+                        <th style="width: 100px;">Prioridade</th>
+                        <th style="width: 120px;">Status</th>
+                        <th style="width: 120px;">Progresso</th>
+                        <th style="width: 100px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paper in next_papers %}
+                    <tr>
+                        <td class="text-tertiary text-sm">{{ forloop.counter }}</td>
+                        <td>
+                            <div>
+                                <a href="{% url 'paper_detail' paper.pk %}" class="text-sm" style="font-weight: var(--font-weight-medium); color: var(--text-primary); text-decoration: none;">
+                                    {{ paper.title|truncatewords:10 }}
+                                </a>
+                                {% if paper.authors.exists %}
+                                <p class="text-xs text-tertiary" style="margin: var(--space-1) 0 0 0;">
+                                    {{ paper.authors.all.0.name }}{% if paper.authors.count > 1 %} et al.{% endif %}
+                                </p>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            {% if paper.priority == 'URGENTE' %}
+                            <span class="badge badge-danger">Urgente</span>
+                            {% elif paper.priority == 'ALTA' %}
+                            <span class="badge badge-warning">Alta</span>
+                            {% elif paper.priority == 'MEDIA' %}
+                            <span class="badge badge-primary">Média</span>
+                            {% else %}
+                            <span class="badge badge-neutral">Baixa</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if paper.status == 'NAO_INICIADO' %}
+                            <span class="badge badge-neutral">Não iniciado</span>
+                            {% elif paper.status == 'EM_LEITURA' %}
+                            <span class="badge badge-primary">Em leitura</span>
+                            {% elif paper.status == 'LIDO' %}
+                            <span class="badge badge-success">Lido</span>
+                            {% else %}
+                            <span class="badge badge-primary">Revisando</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: var(--space-2);">
+                                <div class="progress-bar-container" style="flex: 1;">
+                                    <div class="progress-bar-fill" style="--progress-width: {{ paper.progress_percent }}%; width: var(--progress-width);"></div>
+                                </div>
+                                <span class="text-xs text-secondary">{{ paper.progress_percent }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{% url 'paper_detail' paper.pk %}" class="btn btn-ghost btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-inbox"></i>
+        </div>
+        <h3 class="empty-state-title">Nenhum paper cadastrado</h3>
+        <p class="empty-state-text">Comece adicionando seu primeiro paper para acompanhar seu progresso</p>
+        <a href="{% url 'paper_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Cadastrar Primeiro Paper
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quick Actions -->
+<div class="section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="bi bi-lightning"></i>
+            Atalhos Rápidos
+        </h2>
+    </div>
+
+    <div class="grid grid-cols-4" style="gap: var(--space-4);">
+        <a href="{% url 'paper_list' %}" class="card card-hover" style="text-decoration: none;">
+            <div class="card-body" style="text-align: center; padding: var(--space-8) var(--space-4);">
+                <div style="width: 56px; height: 56px; background: var(--color-primary-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                    <i class="bi bi-list-ul" style="font-size: 28px; color: var(--color-primary-600);"></i>
+                </div>
+                <h3 class="heading-sm" style="margin-bottom: var(--space-1); color: var(--text-primary);">Ver Papers</h3>
+                <p class="text-xs text-tertiary" style="margin: 0;">Lista completa</p>
+            </div>
+        </a>
+
+        <a href="{% url 'paper_create' %}" class="card card-hover" style="text-decoration: none;">
+            <div class="card-body" style="text-align: center; padding: var(--space-8) var(--space-4);">
+                <div style="width: 56px; height: 56px; background: var(--color-success-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                    <i class="bi bi-plus-circle" style="font-size: 28px; color: var(--color-success-600);"></i>
+                </div>
+                <h3 class="heading-sm" style="margin-bottom: var(--space-1); color: var(--text-primary);">Adicionar Paper</h3>
+                <p class="text-xs text-tertiary" style="margin: 0;">Novo cadastro</p>
+            </div>
+        </a>
+
+        <a href="{% url 'experiment_list' %}" class="card card-hover" style="text-decoration: none;">
+            <div class="card-body" style="text-align: center; padding: var(--space-8) var(--space-4);">
+                <div style="width: 56px; height: 56px; background: var(--color-warning-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                    <i class="bi bi-clipboard-data" style="font-size: 28px; color: var(--color-warning-600);"></i>
+                </div>
+                <h3 class="heading-sm" style="margin-bottom: var(--space-1); color: var(--text-primary);">Experimentos</h3>
+                <p class="text-xs text-tertiary" style="margin: 0;">Gerenciar projetos</p>
+            </div>
+        </a>
+
+        <a href="{% url 'tag_list' %}" class="card card-hover" style="text-decoration: none;">
+            <div class="card-body" style="text-align: center; padding: var(--space-8) var(--space-4);">
+                <div style="width: 56px; height: 56px; background: var(--color-neutral-100); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                    <i class="bi bi-tags" style="font-size: 28px; color: var(--text-secondary);"></i>
+                </div>
+                <h3 class="heading-sm" style="margin-bottom: var(--space-1); color: var(--text-primary);">Tags</h3>
+                <p class="text-xs text-tertiary" style="margin: 0;">Organizar temas</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

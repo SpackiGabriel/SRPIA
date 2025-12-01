@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block title %}Papers - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">Meus Papers</h1>
+            <p class="page-subtitle">Gerencie sua biblioteca de papers acadêmicos</p>
+        </div>
+        <a href="{% url 'paper_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Novo Paper
+        </a>
+    </div>
+</div>
+
+<!-- Filters Section -->
+<div class="section">
+    <div class="card">
+        <div class="card-body">
+            <form method="get" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: var(--space-4); align-items: end;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="id_q">Buscar</label>
+                    {{ search_form.q }}
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="id_priority">Prioridade</label>
+                    {{ search_form.priority }}
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="id_status">Status</label>
+                    {{ search_form.status }}
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="id_tag">Tag</label>
+                    {{ search_form.tag }}
+                </div>
+                <button type="submit" class="btn btn-primary" style="height: 42px;">
+                    <i class="bi bi-search"></i>
+                    Buscar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Papers List -->
+{% if papers %}
+<div class="section">
+    <div class="section-header" style="margin-bottom: var(--space-4);">
+        <h2 class="section-title">
+            <i class="bi bi-collection"></i>
+            Papers
+        </h2>
+        <span class="text-sm text-secondary">{{ papers|length }} paper(s) encontrado(s)</span>
+    </div>
+
+    <div class="grid grid-cols-1" style="gap: var(--space-4);">
+        {% for paper in papers %}
+        <div class="card card-hover">
+            <div class="card-body" style="display: grid; grid-template-columns: 1fr auto; gap: var(--space-6);">
+                <!-- Paper Info -->
+                <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                    <!-- Title and Author -->
+                    <div>
+                        <h3 class="heading-md" style="margin-bottom: var(--space-1);">
+                            <a href="{% url 'paper_detail' paper.pk %}" style="text-decoration: none; color: var(--text-primary);">
+                                {{ paper.title }}
+                            </a>
+                        </h3>
+                        {% if paper.authors.exists %}
+                        <p class="text-sm text-secondary" style="margin: 0;">
+                            <i class="bi bi-people"></i>
+                            {% for author in paper.authors.all %}
+                                {{ author.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Abstract -->
+                    {% if paper.abstract %}
+                    <p class="text-sm text-secondary" style="margin: 0; line-height: var(--line-height-relaxed);">
+                        {{ paper.abstract|truncatewords:25 }}
+                    </p>
+                    {% endif %}
+
+                    <!-- Badges and Tags -->
+                    <div style="display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap;">
+                        <!-- Priority Badge -->
+                        {% if paper.priority == 'URGENTE' %}
+                        <span class="badge badge-danger">
+                            <i class="bi bi-exclamation-triangle-fill"></i> Urgente
+                        </span>
+                        {% elif paper.priority == 'ALTA' %}
+                        <span class="badge badge-warning">
+                            <i class="bi bi-exclamation-circle"></i> Alta
+                        </span>
+                        {% elif paper.priority == 'MEDIA' %}
+                        <span class="badge badge-primary">Média</span>
+                        {% else %}
+                        <span class="badge badge-neutral">Baixa</span>
+                        {% endif %}
+
+                        <!-- Status Badge -->
+                        {% if paper.status == 'NAO_INICIADO' %}
+                        <span class="badge badge-neutral">
+                            <i class="bi bi-circle"></i> Não iniciado
+                        </span>
+                        {% elif paper.status == 'EM_LEITURA' %}
+                        <span class="badge badge-primary">
+                            <i class="bi bi-book-half"></i> Em leitura
+                        </span>
+                        {% elif paper.status == 'LIDO' %}
+                        <span class="badge badge-success">
+                            <i class="bi bi-check-circle"></i> Lido
+                        </span>
+                        {% else %}
+                        <span class="badge badge-primary">
+                            <i class="bi bi-arrow-repeat"></i> Revisando
+                        </span>
+                        {% endif %}
+
+                        <!-- Tags -->
+                        {% if paper.tags.exists %}
+                            {% for tag in paper.tags.all|slice:":3" %}
+                            <span class="badge badge-neutral" style="background: var(--color-neutral-100);">
+                                <i class="bi bi-tag"></i> {{ tag.name }}
+                            </span>
+                            {% endfor %}
+                            {% if paper.tags.count > 3 %}
+                            <span class="text-xs text-tertiary">+{{ paper.tags.count|add:"-3" }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-1);">
+                            <span class="text-xs text-secondary">Progresso de Leitura</span>
+                            <span class="text-xs text-secondary" style="font-weight: var(--font-weight-medium);">{{ paper.progress_percent }}%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: {{ paper.progress_percent }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 120px;">
+                    <a href="{% url 'paper_detail' paper.pk %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-eye"></i>
+                        Ver Detalhes
+                    </a>
+                    <a href="{% url 'paper_update' paper.pk %}" class="btn btn-secondary btn-sm">
+                        <i class="bi bi-pencil"></i>
+                        Editar
+                    </a>
+                    <a href="{% url 'paper_delete' paper.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">
+                        <i class="bi bi-trash"></i>
+                        Excluir
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="section">
+    <div style="display: flex; justify-content: center; align-items: center; gap: var(--space-2);">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-secondary btn-sm">
+            <i class="bi bi-chevron-double-left"></i>
+        </a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary btn-sm">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+        {% else %}
+        <button class="btn btn-secondary btn-sm" disabled>
+            <i class="bi bi-chevron-double-left"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm" disabled>
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        {% endif %}
+
+        <span class="text-sm text-secondary" style="padding: 0 var(--space-4);">
+            Página <strong>{{ page_obj.number }}</strong> de <strong>{{ page_obj.paginator.num_pages }}</strong>
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary btn-sm">
+            <i class="bi bi-chevron-right"></i>
+        </a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-secondary btn-sm">
+            <i class="bi bi-chevron-double-right"></i>
+        </a>
+        {% else %}
+        <button class="btn btn-secondary btn-sm" disabled>
+            <i class="bi bi-chevron-right"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm" disabled>
+            <i class="bi bi-chevron-double-right"></i>
+        </button>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+    <div class="empty-state-icon">
+        <i class="bi bi-inbox"></i>
+    </div>
+    <h3 class="empty-state-title">Nenhum paper encontrado</h3>
+    <p class="empty-state-text">
+        {% if request.GET.q %}
+        Não encontramos papers com os critérios de busca informados.<br>
+        Tente ajustar os filtros ou realizar uma nova busca.
+        {% else %}
+        Comece sua biblioteca acadêmica adicionando seu primeiro paper.
+        {% endif %}
+    </p>
+    <div style="display: flex; gap: var(--space-3); justify-content: center;">
+        {% if request.GET.q %}
+        <a href="{% url 'paper_list' %}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i>
+            Limpar Filtros
+        </a>
+        {% endif %}
+        <a href="{% url 'paper_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Adicionar Paper
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .card-body > div:first-child {
+            grid-template-columns: 1fr !important;
+        }
+        form[method="get"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

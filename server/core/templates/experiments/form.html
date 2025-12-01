@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Editar{% else %}Novo{% endif %} Experimento - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-clipboard-data"></i>
+                {% if form.instance.pk %}Editar Experimento{% else %}Novo Experimento{% endif %}
+            </h1>
+            <p class="page-subtitle">Gerencie experimentos e relacione-os com papers</p>
+        </div>
+        <a href="{% url 'experiment_list' %}" class="btn btn-ghost">
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+
+<!-- Form -->
+<div class="section">
+    <div style="max-width: 900px; margin: 0 auto;">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="card">
+                <div class="card-body" style="display: flex; flex-direction: column; gap: var(--space-6);">
+                    <!-- Basic Info Section -->
+                    <div>
+                        <h3 class="heading-md" style="margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-subtle);">
+                            <i class="bi bi-info-circle"></i> Informações do Experimento
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: var(--space-5);">
+                            <!-- Title -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_title">
+                                    {{ form.title.label }}
+                                    <span style="color: var(--color-danger-600);">*</span>
+                                </label>
+                                {{ form.title }}
+                                {% if form.title.errors %}
+                                <span class="form-error">{{ form.title.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_description">
+                                    {{ form.description.label }}
+                                    <span style="color: var(--color-danger-600);">*</span>
+                                </label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                <span class="form-error">{{ form.description.errors.0 }}</span>
+                                {% endif %}
+                                <span class="form-help">Descreva o objetivo e metodologia do experimento</span>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_status">{{ form.status.label }}</label>
+                                {{ form.status }}
+                                {% if form.status.errors %}
+                                <span class="form-error">{{ form.status.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Details Section -->
+                    <div>
+                        <h3 class="heading-md" style="margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-subtle);">
+                            <i class="bi bi-code-slash"></i> Detalhes Técnicos
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: var(--space-5);">
+                            <!-- Code Repository URL -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_code_repository_url">{{ form.code_repository_url.label }}</label>
+                                {{ form.code_repository_url }}
+                                {% if form.code_repository_url.errors %}
+                                <span class="form-error">{{ form.code_repository_url.errors.0 }}</span>
+                                {% else %}
+                                <span class="form-help">URL do repositório Git (GitHub, GitLab, etc)</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Dataset Description -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_dataset_description">{{ form.dataset_description.label }}</label>
+                                {{ form.dataset_description }}
+                                {% if form.dataset_description.errors %}
+                                <span class="form-error">{{ form.dataset_description.errors.0 }}</span>
+                                {% else %}
+                                <span class="form-help">Descreva o dataset utilizado no experimento</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Main Results -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_main_results">{{ form.main_results.label }}</label>
+                                {{ form.main_results }}
+                                {% if form.main_results.errors %}
+                                <span class="form-error">{{ form.main_results.errors.0 }}</span>
+                                {% else %}
+                                <span class="form-help">Principais resultados e métricas obtidas</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Papers Section -->
+                    <div>
+                        <h3 class="heading-md" style="margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-subtle);">
+                            <i class="bi bi-file-earmark-text"></i> Papers Relacionados
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="id_papers">{{ form.papers.label }}</label>
+                            {{ form.papers }}
+                            {% if form.papers.errors %}
+                            <span class="form-error">{{ form.papers.errors.0 }}</span>
+                            {% else %}
+                            <span class="form-help">Selecione os papers que serviram de base para este experimento</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="text-xs text-tertiary">
+                        <i class="bi bi-info-circle"></i> Campos com * são obrigatórios
+                    </span>
+                    <div style="display: flex; gap: var(--space-3);">
+                        <a href="{% url 'experiment_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i>
+                            {% if form.instance.pk %}Atualizar{% else %}Criar{% endif %} Experimento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

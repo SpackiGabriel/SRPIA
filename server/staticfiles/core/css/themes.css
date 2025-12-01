@@ -1,0 +1,102 @@
+/* ============================================
+   SRPIA Design System - Themes
+   Light Theme (default) + Deep Ocean Dark Theme
+   ============================================ */
+
+/* ============================================
+   Deep Ocean Theme
+   ============================================ */
+
+[data-theme="dark"] {
+  /* === Deep Ocean Theme === */
+  /* Inspired by deep sea colors - dark blues instead of pure black */
+  
+  /* === Surface Colors === */
+  --surface-base: #0d1b2a;        /* Deep ocean base */
+  --surface-elevated: #1b263b;    /* Slightly lighter ocean */
+  --surface-overlay: #22304a;     /* Elevated surface */
+  --surface-hover: #2d3e57;       /* Hover state */
+  
+  /* === Background Colors === */
+  --bg-app: #04080f;              /* Deepest ocean (almost black with blue tint) */
+  --bg-page: #04080f;
+  --bg-section: #0d1b2a;
+  
+  /* === Border Colors === */
+  --border-default: #2d4a6b;      /* Ocean border */
+  --border-strong: #3d5a7e;       /* Stronger ocean border */
+  --border-subtle: #1a2942;       /* Subtle ocean border */
+  
+  /* === Text Colors === */
+  --text-primary: #e8f0f8;        /* Light with slight blue tint */
+  --text-secondary: #8fa3ba;      /* Ocean mist */
+  --text-tertiary: #6b7f96;       /* Deeper ocean mist */
+  --text-disabled: #4a5c72;       /* Disabled ocean */
+  --text-inverse: #0d1b2a;
+  
+  /* Adjust semantic colors for ocean theme */
+  --color-success-50: #064e3b;    /* Deep teal */
+  --color-warning-50: #451a03;    /* Keep warm for contrast */
+  --color-danger-50: #450a0a;     /* Keep warm for contrast */
+  --color-primary-50: #1e3a8a;    /* Deep blue */
+  --color-primary-100: #1e40af;   /* Darker blue for backgrounds in dark theme */
+  --color-neutral-50: #1b263b;
+  --color-neutral-100: #22304a;
+  
+  /* Enhanced primary colors for ocean theme */
+  --color-primary-600: #4a9eff;   /* Brighter blue for better contrast */
+  --color-primary-500: #5ba8ff;
+}
+
+/* Theme Toggle Component */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.theme-toggle i {
+  font-size: 18px;
+}
+
+/* Theme Toggle Fixed (for login/register pages) */
+.theme-toggle-fixed {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-fixed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-fixed:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-toggle-fixed i {
+  font-size: 18px;
+}

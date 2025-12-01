@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">Minhas Tags</h1>
+            <p class="page-subtitle">Organize seus papers por tags temáticas</p>
+        </div>
+        <a href="{% url 'tag_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Nova Tag
+        </a>
+    </div>
+</div>
+
+<!-- Tags List -->
+{% if tags %}
+<div class="section">
+    <div class="section-header" style="margin-bottom: var(--space-4);">
+        <h2 class="section-title">
+            <i class="bi bi-tags"></i>
+            Tags
+        </h2>
+        <span class="text-sm text-secondary">{{ tags|length }} tag(s) cadastrada(s)</span>
+    </div>
+
+    <!-- Tags Grid -->
+    <div class="grid grid-cols-3" style="gap: var(--space-4);">
+        {% for tag in tags %}
+        <div class="card card-hover">
+            <div class="card-body" style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <!-- Tag Name -->
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: var(--space-2);">
+                        <div style="width: 40px; height: 40px; background: var(--color-primary-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-tag-fill" style="font-size: 20px; color: var(--color-primary-600);"></i>
+                        </div>
+                        <div>
+                            <h3 class="heading-sm" style="margin: 0;">{{ tag.name }}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Papers Count -->
+                <div style="padding: var(--space-3); background: var(--surface-hover); border-radius: var(--radius-md); text-align: center;">
+                    <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Papers com esta tag
+                    </p>
+                    <p class="display-sm" style="margin: 0; color: var(--color-primary-600);">
+                        {{ tag.paper_count }}
+                    </p>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; gap: var(--space-2);">
+                    {% if tag.paper_count > 0 %}
+                    <a href="{% url 'paper_list' %}?tag={{ tag.id }}" class="btn btn-secondary btn-sm" style="flex: 1;">
+                        <i class="bi bi-eye"></i>
+                        Ver Papers
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'tag_delete' tag.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Alternative: Table View (commented out, can be enabled)
+    <div class="card">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;"></th>
+                        <th>Nome</th>
+                        <th style="width: 150px; text-align: center;">Papers</th>
+                        <th style="width: 150px; text-align: center;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tag in tags %}
+                    <tr>
+                        <td>
+                            <div style="width: 32px; height: 32px; background: var(--color-primary-50); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-tag-fill" style="font-size: 14px; color: var(--color-primary-600);"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge badge-primary" style="font-size: var(--font-size-sm);">
+                                {{ tag.name }}
+                            </span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="text-sm" style="font-weight: var(--font-weight-medium);">
+                                {{ tag.paper_count }}
+                            </span>
+                        </td>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: var(--space-2); justify-content: center;">
+                                {% if tag.paper_count > 0 %}
+                                <a href="{% url 'paper_list' %}?tag={{ tag.id }}" class="btn btn-ghost btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'tag_delete' tag.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    -->
+</div>
+
+<!-- Tags Info Card -->
+<div class="section">
+    <div class="card" style="border-left: 3px solid var(--color-primary-500);">
+        <div class="card-body" style="display: flex; gap: var(--space-4); align-items: center;">
+            <div style="width: 48px; height: 48px; background: var(--color-primary-100); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="bi bi-lightbulb" style="font-size: 24px; color: var(--color-primary-600);"></i>
+            </div>
+            <div>
+                <h4 class="heading-sm" style="margin-bottom: var(--space-1); color: var(--text-primary);">
+                    Dica sobre Tags
+                </h4>
+                <p class="text-sm text-secondary" style="margin: 0;">
+                    Use tags para organizar seus papers por temas, áreas de pesquisa ou qualquer categorização que faça sentido para você. 
+                    Tags facilitam a busca e organização da sua biblioteca.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+    <div class="empty-state-icon">
+        <i class="bi bi-tags"></i>
+    </div>
+    <h3 class="empty-state-title">Nenhuma tag cadastrada</h3>
+    <p class="empty-state-text">
+        Crie tags para organizar seus papers por temas,<br>
+        áreas de pesquisa ou qualquer categorização útil.
+    </p>
+    <a href="{% url 'tag_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i>
+        Criar Primeira Tag
+    </a>
+</div>
+
+<!-- Getting Started Guide -->
+<div class="section">
+    <div class="card">
+        <div class="card-body" style="padding: var(--space-8);">
+            <h3 class="heading-lg" style="text-align: center; margin-bottom: var(--space-6);">
+                Como usar Tags
+            </h3>
+            <div class="grid grid-cols-3" style="gap: var(--space-6);">
+                <div style="text-align: center;">
+                    <div style="width: 64px; height: 64px; background: var(--color-primary-50); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                        <i class="bi bi-plus-circle" style="font-size: 32px; color: var(--color-primary-600);"></i>
+                    </div>
+                    <h4 class="heading-sm" style="margin-bottom: var(--space-2);">1. Crie Tags</h4>
+                    <p class="text-sm text-secondary">
+                        Defina categorias como "Machine Learning", "NLP", "Computer Vision"
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 64px; height: 64px; background: var(--color-success-50); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                        <i class="bi bi-link-45deg" style="font-size: 32px; color: var(--color-success-600);"></i>
+                    </div>
+                    <h4 class="heading-sm" style="margin-bottom: var(--space-2);">2. Adicione aos Papers</h4>
+                    <p class="text-sm text-secondary">
+                        Associe tags relevantes ao criar ou editar papers
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 64px; height: 64px; background: var(--color-warning-50); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+                        <i class="bi bi-search" style="font-size: 32px; color: var(--color-warning-600);"></i>
+                    </div>
+                    <h4 class="heading-sm" style="margin-bottom: var(--space-2);">3. Filtre e Organize</h4>
+                    <p class="text-sm text-secondary">
+                        Use tags para filtrar papers por tema na listagem
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media (max-width: 768px) {
+        .grid-cols-3 {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

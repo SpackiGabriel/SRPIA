@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ paper.title }} - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{{ paper.title }}</h1>
+        {% if paper.authors.exists %}
+        <p class="page-subtitle">
+            <i class="bi bi-people"></i>
+            {{ paper.authors.all|join:", " }}
+        </p>
+        {% endif %}
+    </div>
+    <div style="display: flex; gap: var(--space-2);">
+        <a href="{% url 'paper_update' paper.pk %}" class="btn btn-secondary">
+            <i class="bi bi-pencil"></i>
+            Editar
+        </a>
+        <a href="{% url 'paper_delete' paper.pk %}" class="btn btn-danger">
+            <i class="bi bi-trash"></i>
+            Excluir
+        </a>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="section">
+    <div class="grid grid-cols-3" style="gap: var(--space-6); align-items: start;">
+        <!-- Main Content - 2 columns -->
+        <div style="grid-column: span 2;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-info-circle"></i>
+                        Informações do Paper
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if paper.abstract %}
+                    <div style="margin-bottom: var(--space-6);">
+                        <h4 class="heading-xs" style="margin-bottom: var(--space-3);">Resumo</h4>
+                        <p class="text-sm text-secondary" style="line-height: 1.6;">{{ paper.abstract }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="grid grid-cols-3" style="gap: var(--space-4); margin-bottom: var(--space-6);">
+                        {% if paper.year %}
+                        <div>
+                            <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">Ano</p>
+                            <p class="text-sm" style="margin: 0; font-weight: var(--font-weight-medium);">{{ paper.year }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if paper.venue %}
+                        <div style="grid-column: span 2;">
+                            <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">Venue/Conferência</p>
+                            <p class="text-sm" style="margin: 0; font-weight: var(--font-weight-medium);">{{ paper.venue }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if paper.doi %}
+                    <div style="margin-bottom: var(--space-4);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">DOI</p>
+                        <code class="text-sm" style="background: var(--color-neutral-100); padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm);">{{ paper.doi }}</code>
+                    </div>
+                    {% endif %}
+                    
+                    {% if paper.url %}
+                    <div style="margin-bottom: var(--space-4);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">URL</p>
+                        <a href="{{ paper.url }}" target="_blank" class="text-sm" style="color: var(--color-primary-600); text-decoration: none;">{{ paper.url }}</a>
+                    </div>
+                    {% endif %}
+                    
+                    {% if paper.pdf_file %}
+                    <div style="margin-bottom: var(--space-4);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Arquivo PDF</p>
+                        <a href="{{ paper.pdf_file.url }}" target="_blank" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-file-pdf"></i>
+                            Baixar PDF
+                        </a>
+                    </div>
+                    {% endif %}
+                    
+                    {% if paper.tags.exists %}
+                    <div>
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Tags</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+                            {% for tag in paper.tags.all %}
+                            <span class="badge badge-primary">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar - 1 column -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+            <!-- Status e Progresso -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-xs" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-graph-up"></i>
+                        Status e Progresso
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div style="margin-bottom: var(--space-4);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Prioridade</p>
+                        {% if paper.priority == 'URGENTE' %}
+                        <span class="badge badge-danger">Urgente</span>
+                        {% elif paper.priority == 'ALTA' %}
+                        <span class="badge badge-warning">Alta</span>
+                        {% elif paper.priority == 'MEDIA' %}
+                        <span class="badge badge-primary">Média</span>
+                        {% else %}
+                        <span class="badge badge-neutral">Baixa</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="margin-bottom: var(--space-4);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Status</p>
+                        {% if paper.status == 'NAO_INICIADO' %}
+                        <span class="badge badge-neutral">Não iniciado</span>
+                        {% elif paper.status == 'EM_LEITURA' %}
+                        <span class="badge badge-primary">Em leitura</span>
+                        {% elif paper.status == 'LIDO' %}
+                        <span class="badge badge-success">Lido</span>
+                        {% else %}
+                        <span class="badge badge-primary">Revisando</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="margin-bottom: var(--space-4);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Progresso</p>
+                        <div style="display: flex; align-items: center; gap: var(--space-2);">
+                            <div class="progress-bar-container" style="flex: 1;">
+                                <div class="progress-bar-fill" style="--progress-width: {{ paper.progress_percent }}%; width: var(--progress-width);"></div>
+                            </div>
+                            <span class="text-xs text-secondary" style="font-weight: var(--font-weight-medium);">{{ paper.progress_percent }}%</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Tempo Total de Leitura</p>
+                        <p class="text-sm" style="margin: 0; font-weight: var(--font-weight-medium);">{{ paper.total_reading_time }} minutos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ações rápidas -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-xs" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-lightning"></i>
+                        Ações Rápidas
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                        <a href="{% url 'session_create' paper.pk %}" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-clock"></i>
+                            Registrar Sessão de Leitura
+                        </a>
+                        <a href="{% url 'note_create' paper.pk %}" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-journal-plus"></i>
+                            Adicionar Nota
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notas -->
+<div class="section">
+    <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                <i class="bi bi-journal-text"></i>
+                Notas ({{ notes.count }})
+            </h3>
+            <a href="{% url 'note_create' paper.pk %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i>
+                Nova Nota
+            </a>
+        </div>
+        <div class="card-body">
+            {% if notes %}
+            <div class="grid grid-cols-2" style="gap: var(--space-4);">
+                {% for note in notes %}
+                <div class="card">
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-3);">
+                            <h4 class="heading-xs" style="margin: 0;">{{ note.title }}</h4>
+                            <span class="badge badge-neutral">{{ note.get_note_type_display }}</span>
+                        </div>
+                        <p class="text-sm text-secondary" style="margin-bottom: var(--space-3); line-height: 1.5;">{{ note.content|truncatewords:30 }}</p>
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-4);">{{ note.created_at|date:"d/m/Y H:i" }}</p>
+                        <div style="display: flex; gap: var(--space-2);">
+                            <a href="{% url 'note_update' note.pk %}" class="btn btn-ghost btn-sm">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </a>
+                            <a href="{% url 'note_delete' note.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">
+                                <i class="bi bi-trash"></i>
+                                Excluir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-journal"></i>
+                </div>
+                <h3 class="empty-state-title">Nenhuma nota cadastrada</h3>
+                <p class="empty-state-text">Adicione notas para registrar suas observações sobre este paper</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Sessões de Leitura -->
+<div class="section">
+    <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                <i class="bi bi-clock-history"></i>
+                Sessões de Leitura ({{ sessions.count }})
+            </h3>
+            <a href="{% url 'session_create' paper.pk %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i>
+                Nova Sessão
+            </a>
+        </div>
+        <div class="card-body">
+            {% if sessions %}
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Duração</th>
+                            <th>Notas Rápidas</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in sessions %}
+                        <tr>
+                            <td class="text-sm">{{ session.date|date:"d/m/Y" }}</td>
+                            <td class="text-sm">{{ session.duration_minutes }} min</td>
+                            <td class="text-sm text-secondary">{{ session.quick_notes|truncatewords:10 }}</td>
+                            <td>
+                                <a href="{% url 'session_delete' session.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <h3 class="empty-state-title">Nenhuma sessão registrada</h3>
+                <p class="empty-state-text">Registre suas sessões de leitura para acompanhar seu progresso</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Experimentos Relacionados -->
+{% if experiments %}
+<div class="section">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                <i class="bi bi-flask"></i>
+                Experimentos Relacionados
+            </h3>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                {% for exp in experiments %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-3); background: var(--color-neutral-50); border-radius: var(--radius-md);">
+                    <a href="{% url 'experiment_detail' exp.pk %}" class="text-sm" style="font-weight: var(--font-weight-medium); color: var(--text-primary); text-decoration: none;">
+                        {{ exp.title }}
+                    </a>
+                    <span class="badge badge-primary">{{ exp.get_status_display }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

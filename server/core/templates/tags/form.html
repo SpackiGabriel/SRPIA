@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Editar{% else %}Nova{% endif %} Tag - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-tag"></i>
+                {% if form.instance.pk %}Editar Tag{% else %}Nova Tag{% endif %}
+            </h1>
+            <p class="page-subtitle">Organize seus papers por tags temáticas</p>
+        </div>
+        <a href="{% url 'tag_list' %}" class="btn btn-ghost">
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+
+<!-- Form -->
+<div class="section">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label" for="id_name">
+                            {{ form.name.label }}
+                            <span style="color: var(--color-danger-600);">*</span>
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <span class="form-error">{{ form.name.errors.0 }}</span>
+                        {% else %}
+                        <span class="form-help">Nome curto e descritivo (ex: Machine Learning, NLP, Computer Vision)</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="text-xs text-tertiary">
+                        <i class="bi bi-info-circle"></i> Campo obrigatório
+                    </span>
+                    <div style="display: flex; gap: var(--space-3);">
+                        <a href="{% url 'tag_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i>
+                            {% if form.instance.pk %}Atualizar{% else %}Criar{% endif %} Tag
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

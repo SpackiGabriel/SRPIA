@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Experimentos - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">Meus Experimentos</h1>
+            <p class="page-subtitle">Gerencie seus experimentos e relacione-os com papers</p>
+        </div>
+        <a href="{% url 'experiment_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Novo Experimento
+        </a>
+    </div>
+</div>
+
+<!-- Experiments List -->
+{% if experiments %}
+<div class="section">
+    <div class="section-header" style="margin-bottom: var(--space-4);">
+        <h2 class="section-title">
+            <i class="bi bi-clipboard-data"></i>
+            Experimentos
+        </h2>
+        <span class="text-sm text-secondary">{{ experiments|length }} experimento(s)</span>
+    </div>
+
+    <div class="grid grid-cols-1" style="gap: var(--space-4);">
+        {% for exp in experiments %}
+        <div class="card card-hover">
+            <div class="card-body" style="display: grid; grid-template-columns: 1fr auto; gap: var(--space-6);">
+                <!-- Experiment Info -->
+                <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                    <!-- Title -->
+                    <div>
+                        <h3 class="heading-md" style="margin-bottom: var(--space-1);">
+                            <a href="{% url 'experiment_detail' exp.pk %}" style="text-decoration: none; color: var(--text-primary);">
+                                {{ exp.title }}
+                            </a>
+                        </h3>
+                        {% if exp.date_started %}
+                        <p class="text-xs text-tertiary" style="margin: 0;">
+                            <i class="bi bi-calendar"></i>
+                            Iniciado em {{ exp.date_started|date:"d/m/Y" }}
+                            {% if exp.date_completed %}
+                                • Concluído em {{ exp.date_completed|date:"d/m/Y" }}
+                            {% endif %}
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    {% if exp.description %}
+                    <p class="text-sm text-secondary" style="margin: 0; line-height: var(--line-height-relaxed);">
+                        {{ exp.description|truncatewords:30 }}
+                    </p>
+                    {% endif %}
+
+                    <!-- Status and Papers -->
+                    <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                        <!-- Status Badge -->
+                        {% if exp.status == 'PLANEJADO' %}
+                        <span class="badge badge-neutral">
+                            <i class="bi bi-lightbulb"></i> Planejado
+                        </span>
+                        {% elif exp.status == 'EM_EXECUCAO' %}
+                        <span class="badge badge-primary">
+                            <i class="bi bi-play-circle"></i> Em execução
+                        </span>
+                        {% elif exp.status == 'CONCLUIDO' %}
+                        <span class="badge badge-success">
+                            <i class="bi bi-check-circle"></i> Concluído
+                        </span>
+                        {% else %}
+                        <span class="badge badge-danger">
+                            <i class="bi bi-x-circle"></i> Abortado
+                        </span>
+                        {% endif %}
+
+                        <!-- Papers Count -->
+                        {% if exp.papers.exists %}
+                        <div style="display: flex; align-items: center; gap: var(--space-2);">
+                            <div style="width: 32px; height: 32px; background: var(--color-primary-50); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-file-earmark-text" style="font-size: 16px; color: var(--color-primary-600);"></i>
+                            </div>
+                            <span class="text-sm text-secondary">
+                                <strong>{{ exp.papers.count }}</strong> paper(s) relacionado(s)
+                            </span>
+                        </div>
+                        {% else %}
+                        <span class="text-xs text-tertiary">
+                            <i class="bi bi-info-circle"></i> Nenhum paper relacionado
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Papers List Preview (if any) -->
+                    {% if exp.papers.exists %}
+                    <div style="padding: var(--space-3); background: var(--surface-hover); border-radius: var(--radius-md); border-left: 3px solid var(--color-primary-500);">
+                        <p class="text-xs text-secondary" style="margin-bottom: var(--space-2); font-weight: var(--font-weight-medium);">
+                            Papers Relacionados:
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: var(--space-1);">
+                            {% for paper in exp.papers.all|slice:":3" %}
+                            <a href="{% url 'paper_detail' paper.pk %}" class="text-sm" style="color: var(--text-primary); text-decoration: none;">
+                                <i class="bi bi-arrow-right-short"></i> {{ paper.title|truncatewords:10 }}
+                            </a>
+                            {% endfor %}
+                            {% if exp.papers.count > 3 %}
+                            <span class="text-xs text-tertiary">+{{ exp.papers.count|add:"-3" }} mais...</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 120px;">
+                    <a href="{% url 'experiment_detail' exp.pk %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-eye"></i>
+                        Ver Detalhes
+                    </a>
+                    <a href="{% url 'experiment_update' exp.pk %}" class="btn btn-secondary btn-sm">
+                        <i class="bi bi-pencil"></i>
+                        Editar
+                    </a>
+                    <a href="{% url 'experiment_delete' exp.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">
+                        <i class="bi bi-trash"></i>
+                        Excluir
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+    <div class="empty-state-icon">
+        <i class="bi bi-clipboard-data"></i>
+    </div>
+    <h3 class="empty-state-title">Nenhum experimento cadastrado</h3>
+    <p class="empty-state-text">
+        Organize seus experimentos e relacione-os com papers para<br>
+        acompanhar suas pesquisas e descobertas.
+    </p>
+    <a href="{% url 'experiment_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i>
+        Criar Primeiro Experimento
+    </a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media (max-width: 768px) {
+        .card-body > div:first-child {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

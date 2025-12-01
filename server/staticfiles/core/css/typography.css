@@ -1,0 +1,74 @@
+/* ============================================
+   SRPIA Design System - Typography
+   Text Styles & Hierarchy
+   ============================================ */
+
+/* Display Sizes */
+.display-lg { 
+  font-size: var(--font-size-4xl); 
+  font-weight: var(--font-weight-bold); 
+  line-height: var(--line-height-tight); 
+}
+
+.display-md { 
+  font-size: var(--font-size-3xl); 
+  font-weight: var(--font-weight-bold); 
+  line-height: var(--line-height-tight); 
+}
+
+.display-sm { 
+  font-size: var(--font-size-2xl); 
+  font-weight: var(--font-weight-bold); 
+  line-height: var(--line-height-tight); 
+}
+
+/* Headings */
+.heading-xl { 
+  font-size: var(--font-size-2xl); 
+  font-weight: var(--font-weight-semibold); 
+  line-height: var(--line-height-tight); 
+}
+
+.heading-lg { 
+  font-size: var(--font-size-xl); 
+  font-weight: var(--font-weight-semibold); 
+  line-height: var(--line-height-tight); 
+}
+
+.heading-md { 
+  font-size: var(--font-size-lg); 
+  font-weight: var(--font-weight-semibold); 
+  line-height: var(--line-height-normal); 
+}
+
+.heading-sm { 
+  font-size: var(--font-size-base); 
+  font-weight: var(--font-weight-semibold); 
+  line-height: var(--line-height-normal); 
+}
+
+/* Body Text */
+.text-lg { 
+  font-size: var(--font-size-lg); 
+  line-height: var(--line-height-relaxed); 
+}
+
+.text-base { 
+  font-size: var(--font-size-base); 
+  line-height: var(--line-height-normal); 
+}
+
+.text-sm { 
+  font-size: var(--font-size-sm); 
+  line-height: var(--line-height-normal); 
+}
+
+.text-xs { 
+  font-size: var(--font-size-xs); 
+  line-height: var(--line-height-normal); 
+}
+
+/* Text Colors */
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-disabled { color: var(--text-disabled); }

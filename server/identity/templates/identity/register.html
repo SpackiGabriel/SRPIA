@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro - SRPIA{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary-100) 0%, var(--color-primary-200) 100%);
+    padding: var(--space-6);
+}
+
+[data-theme="dark"] .auth-container {
+    background: linear-gradient(135deg, var(--surface-base) 0%, var(--surface-elevated) 100%);
+}
+
+.auth-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-2xl);
+    max-width: 480px;
+    width: 100%;
+    overflow: hidden;
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-header {
+    text-align: center;
+    padding: var(--space-8) var(--space-6) var(--space-6);
+    background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%);
+    color: var(--text-inverse);
+}
+
+.auth-logo {
+    font-size: 3rem;
+    margin-bottom: var(--space-3);
+    display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 var(--space-2);
+}
+
+.auth-subtitle {
+    font-size: var(--font-size-sm);
+    opacity: 0.95;
+    margin: 0;
+}
+
+.auth-body {
+    padding: var(--space-8) var(--space-6);
+}
+
+.auth-form-group {
+    margin-bottom: var(--space-5);
+}
+
+.auth-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.auth-input {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--text-primary);
+    background: var(--surface-base);
+    border: 2px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 4px var(--color-primary-100);
+}
+
+.auth-btn {
+    width: 100%;
+    padding: var(--space-4);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-inverse);
+    background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.auth-btn:active {
+    transform: translateY(0);
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: var(--space-6) 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-default);
+}
+
+.auth-divider span {
+    padding: 0 var(--space-3);
+    color: var(--text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+.auth-footer {
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.auth-link {
+    color: var(--color-primary-600);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.auth-link:hover {
+    color: var(--color-primary-700);
+    text-decoration: underline;
+}
+
+.auth-help {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    margin-top: var(--space-2);
+}
+
+.auth-error {
+    padding: var(--space-3);
+    background: var(--color-danger-50);
+    border: 1px solid var(--color-danger-200);
+    border-radius: var(--radius-md);
+    color: var(--color-danger-700);
+    font-size: var(--font-size-xs);
+    margin-top: var(--space-2);
+}
+
+.password-requirements {
+    background: var(--color-neutral-50);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin-top: var(--space-2);
+}
+
+.password-requirements-title {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2);
+}
+
+.password-requirements ul {
+    margin: 0;
+    padding-left: var(--space-5);
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+}
+
+.password-requirements li {
+    margin-bottom: var(--space-1);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+            <h1 class="auth-title">Criar Conta</h1>
+            <p class="auth-subtitle">Junte-se ao SRPIA hoje</p>
+        </div>
+        
+        <div class="auth-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="auth-form-group">
+                    <label for="id_username" class="auth-label">Usuário</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="auth-error">{{ form.username.errors }}</div>
+                    {% else %}
+                        <div class="auth-help">150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.</div>
+                    {% endif %}
+                </div>
+                
+                <div class="auth-form-group">
+                    <label for="id_email" class="auth-label">E-mail</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="auth-error">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="auth-form-group">
+                    <label for="id_password1" class="auth-label">Senha</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <div class="auth-error">{{ form.password1.errors }}</div>
+                    {% else %}
+                        <div class="password-requirements">
+                            <div class="password-requirements-title">
+                                <i class="bi bi-shield-check"></i> Requisitos da senha:
+                            </div>
+                            <ul>
+                                <li>Mínimo de 8 caracteres</li>
+                                <li>Não pode ser muito comum</li>
+                                <li>Não pode ser totalmente numérica</li>
+                                <li>Diferente de suas outras informações</li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="auth-form-group">
+                    <label for="id_password2" class="auth-label">Confirmar Senha</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <div class="auth-error">{{ form.password2.errors }}</div>
+                    {% else %}
+                        <div class="auth-help">Digite a mesma senha para confirmação</div>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="auth-btn">
+                    <i class="bi bi-person-plus"></i>
+                    Criar Conta
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>ou</span>
+            </div>
+            
+            <div class="auth-footer">
+                Já tem uma conta? <a href="{% url 'identity:login' %}" class="auth-link">Fazer login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

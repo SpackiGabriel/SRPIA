@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Editar{% else %}Nova{% endif %} Sessão de Leitura - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-book"></i>
+                {% if form.instance.pk %}Editar Sessão{% else %}Nova Sessão de Leitura{% endif %}
+            </h1>
+            <p class="page-subtitle">Registre suas sessões de leitura e acompanhe seu progresso</p>
+        </div>
+        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-ghost">
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+
+<!-- Form -->
+<div class="section">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="card">
+                <div class="card-body" style="display: flex; flex-direction: column; gap: var(--space-5);">
+                    <!-- Date and Duration -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5);">
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label class="form-label" for="id_date">
+                                {{ form.date.label }}
+                                <span style="color: var(--color-danger-600);">*</span>
+                            </label>
+                            {{ form.date }}
+                            {% if form.date.errors %}
+                            <span class="form-error">{{ form.date.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Duration -->
+                        <div class="form-group">
+                            <label class="form-label" for="id_duration_minutes">
+                                {{ form.duration_minutes.label }}
+                                <span style="color: var(--color-danger-600);">*</span>
+                            </label>
+                            {{ form.duration_minutes }}
+                            {% if form.duration_minutes.errors %}
+                            <span class="form-error">{{ form.duration_minutes.errors.0 }}</span>
+                            {% else %}
+                            <span class="form-help">Duração em minutos</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_quick_notes">{{ form.quick_notes.label }}</label>
+                        {{ form.quick_notes }}
+                        {% if form.quick_notes.errors %}
+                        <span class="form-error">{{ form.quick_notes.errors.0 }}</span>
+                        {% else %}
+                        <span class="form-help">Observações sobre esta sessão de leitura</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Paper -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_paper">
+                            {{ form.paper.label }}
+                            <span style="color: var(--color-danger-600);">*</span>
+                        </label>
+                        {{ form.paper }}
+                        {% if form.paper.errors %}
+                        <span class="form-error">{{ form.paper.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="text-xs text-tertiary">
+                        <i class="bi bi-info-circle"></i> Campos com * são obrigatórios
+                    </span>
+                    <div style="display: flex; gap: var(--space-3);">
+                        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i>
+                            {% if form.instance.pk %}Atualizar{% else %}Registrar{% endif %} Sessão
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media (max-width: 768px) {
+        .card-body > div[style*="grid-template-columns"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Editar{% else %}Nova{% endif %} Nota - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-sticky"></i>
+                {% if form.instance.pk %}Editar Nota{% else %}Nova Nota{% endif %}
+            </h1>
+            <p class="page-subtitle">Adicione notas e observações sobre seus papers</p>
+        </div>
+        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-ghost">
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+
+<!-- Form -->
+<div class="section">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="card">
+                <div class="card-body" style="display: flex; flex-direction: column; gap: var(--space-5);">
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_title">
+                            {{ form.title.label }}
+                            <span style="color: var(--color-danger-600);">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                        <span class="form-error">{{ form.title.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Content -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_content">
+                            {{ form.content.label }}
+                            <span style="color: var(--color-danger-600);">*</span>
+                        </label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                        <span class="form-error">{{ form.content.errors.0 }}</span>
+                        {% endif %}
+                        <span class="form-help">Suas observações, insights, questões ou comentários sobre o paper</span>
+                    </div>
+
+                    <!-- Paper -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_paper">
+                            {{ form.paper.label }}
+                            <span style="color: var(--color-danger-600);">*</span>
+                        </label>
+                        {{ form.paper }}
+                        {% if form.paper.errors %}
+                        <span class="form-error">{{ form.paper.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="text-xs text-tertiary">
+                        <i class="bi bi-info-circle"></i> Campos com * são obrigatórios
+                    </span>
+                    <div style="display: flex; gap: var(--space-3);">
+                        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i>
+                            {% if form.instance.pk %}Atualizar{% else %}Criar{% endif %} Nota
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

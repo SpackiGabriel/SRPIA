@@ -1,0 +1,34 @@
+/* ============================================
+   SRPIA Design System - Base Styles
+   Reset & Global Styles
+   ============================================ */
+
+/* ============================================
+   Design Principles:
+   1. Clarity above all
+   2. Neutral colors as base, strong colors only for states
+   3. Consistency across all screens
+   4. Optimal information density for daily use
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+body.authenticated-layout {
+  display: flex;
+  flex-direction: column;
+}

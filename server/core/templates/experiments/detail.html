@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ experiment.title }} - SRPIA{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{{ experiment.title }}</h1>
+        <p class="page-subtitle">
+            {% if experiment.status == 'PLANEJADO' %}
+            <span class="badge badge-neutral">Planejado</span>
+            {% elif experiment.status == 'EM_EXECUCAO' %}
+            <span class="badge badge-warning">Em execução</span>
+            {% elif experiment.status == 'CONCLUIDO' %}
+            <span class="badge badge-success">Concluído</span>
+            {% else %}
+            <span class="badge badge-danger">Abortado</span>
+            {% endif %}
+        </p>
+    </div>
+    <div style="display: flex; gap: var(--space-2);">
+        <a href="{% url 'experiment_update' experiment.pk %}" class="btn btn-secondary">
+            <i class="bi bi-pencil"></i>
+            Editar
+        </a>
+        <a href="{% url 'experiment_delete' experiment.pk %}" class="btn btn-danger">
+            <i class="bi bi-trash"></i>
+            Excluir
+        </a>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="section">
+    <div class="grid grid-cols-3" style="gap: var(--space-6); align-items: start;">
+        <!-- Main Content - 2 columns -->
+        <div style="grid-column: span 2; display: flex; flex-direction: column; gap: var(--space-4);">
+            <!-- Descrição -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-info-circle"></i>
+                        Descrição
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-sm text-secondary" style="line-height: 1.6; margin: 0;">{{ experiment.description }}</p>
+                </div>
+            </div>
+            
+            {% if experiment.dataset_description %}
+            <!-- Dataset -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-database"></i>
+                        Dataset
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-sm text-secondary" style="line-height: 1.6; margin: 0;">{{ experiment.dataset_description }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if experiment.main_results %}
+            <!-- Resultados Principais -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-sm" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-graph-up"></i>
+                        Resultados Principais
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-sm text-secondary" style="line-height: 1.6; margin: 0;">{{ experiment.main_results }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar - 1 column -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+            {% if experiment.code_repository_url %}
+            <!-- Repositório -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-xs" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-code-slash"></i>
+                        Repositório
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <a href="{{ experiment.code_repository_url }}" target="_blank" class="btn btn-secondary btn-sm" style="width: 100%;">
+                        <i class="bi bi-github"></i>
+                        Ver Repositório
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Papers Relacionados -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="heading-xs" style="margin: 0; display: flex; align-items: center; gap: var(--space-2);">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Papers Relacionados
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if experiment.papers.exists %}
+                    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                        {% for paper in experiment.papers.all %}
+                        <a href="{% url 'paper_detail' paper.pk %}" class="text-sm" style="color: var(--text-primary); text-decoration: none; padding: var(--space-2); background: var(--color-neutral-50); border-radius: var(--radius-sm); display: block;">
+                            {{ paper.title|truncatewords:8 }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-sm text-tertiary" style="margin: 0;">Nenhum paper relacionado</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

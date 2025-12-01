@@ -1,0 +1,25 @@
+/* ============================================
+   SRPIA Design System
+   Professional B2B Identity - Modular Architecture
+   ============================================ */
+
+/* Import Design Tokens & Variables */
+@import url('css/variables.css');
+
+/* Import Themes (Light + Deep Ocean Dark) */
+@import url('css/themes.css');
+
+/* Import Base Styles & Reset */
+@import url('css/base.css');
+
+/* Import Typography */
+@import url('css/typography.css');
+
+/* Import Layout Components */
+@import url('css/layout.css');
+
+/* Import UI Components */
+@import url('css/components.css');
+
+/* Import Utility Classes */
+@import url('css/utilities.css');
