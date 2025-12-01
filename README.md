@@ -5,7 +5,7 @@ Sistema web para ajudar estudantes e pesquisadores a **organizar e acompanhar a 
 ##  Índice
 
 - [💡 O que é?](#-o-que-é)
-- [✨ Principais Funcionalidades](#✨-principais-funcionalidades)
+- [✨ Principais Funcionalidades](#-principais-funcionalidades)
 - [🚀 Como Rodar o Sistema](#-como-rodar-o-sistema)
 - [💡 Como Usar o Sistema](#-como-usar-o-sistema)
 - [❓ Problemas Comuns](#-problemas-comuns)
