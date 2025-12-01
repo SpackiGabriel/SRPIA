@@ -1,7 +1,4 @@
-"""
-Comando Django para popular o banco de dados com dados de demonstração
-Execute com: python manage.py populate
-"""
+"""Comando para popular o banco com dados de demonstração"""
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -199,11 +196,9 @@ class Command(BaseCommand):
             )
             
             if created:
-                # Adicionar autores
                 for idx in author_indices:
                     paper.authors.add(authors[idx])
                 
-                # Adicionar tags
                 for idx in tag_indices:
                     paper.tags.add(tags[idx])
                 
@@ -211,7 +206,6 @@ class Command(BaseCommand):
             
             papers.append(paper)
 
-        # Criar notas
         self.stdout.write('')
         self.stdout.write('Criando notas...')
         notes_data = [
@@ -258,7 +252,6 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(f'  ✓ {note.title}')
 
-        # Criar sessões de leitura
         self.stdout.write('')
         self.stdout.write('Criando sessões de leitura...')
         sessions_data = [
@@ -305,7 +298,6 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(f'  ✓ Sessão para "{session.paper.title[:40]}..."')
 
-        # Criar experimentos
         self.stdout.write('')
         self.stdout.write('Criando experimentos...')
         experiments_data = [
@@ -348,7 +340,6 @@ class Command(BaseCommand):
             )
             
             if created:
-                # Adicionar papers
                 for idx in paper_indices:
                     experiment.papers.add(papers[idx])
                 

@@ -18,8 +18,6 @@ from ..services import RankingService
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
-    """Mixin para garantir que apenas o owner acessa o objeto"""
-    
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
 
@@ -27,7 +25,6 @@ class OwnerRequiredMixin(LoginRequiredMixin):
 
 
 class PaperListView(LoginRequiredMixin, ListView):
-    """Lista de papers com busca e filtros"""
     model = Paper
     template_name = 'papers/list.html'
     context_object_name = 'papers'
@@ -37,13 +34,11 @@ class PaperListView(LoginRequiredMixin, ListView):
         return Paper.objects.filter(owner=self.request.user)
 
 class PaperDetailView(OwnerRequiredMixin, DetailView):
-    """Detalhes de um paper"""
     model = Paper
     template_name = 'papers/detail.html'
     context_object_name = 'paper'
 
 class PaperCreateView(LoginRequiredMixin, CreateView):
-    """Criação de novo paper"""
     model = Paper
     form_class = PaperForm
     template_name = 'papers/form.html'
@@ -59,7 +54,6 @@ class PaperCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class PaperUpdateView(OwnerRequiredMixin, UpdateView):
-    """Edição de paper"""
     model = Paper
     form_class = PaperForm
     template_name = 'papers/form.html'
@@ -73,7 +67,6 @@ class PaperUpdateView(OwnerRequiredMixin, UpdateView):
         return reverse_lazy('paper_detail', kwargs={'pk': self.object.pk})
 
 class PaperDeleteView(OwnerRequiredMixin, DeleteView):
-    """Exclusão de paper"""
     model = Paper
     template_name = 'papers/confirm_delete.html'
     success_url = reverse_lazy('paper_list')

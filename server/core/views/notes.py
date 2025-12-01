@@ -18,8 +18,6 @@ from ..services import RankingService
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
-    """Mixin para garantir que apenas o owner acessa o objeto"""
-    
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
 
@@ -27,7 +25,6 @@ class OwnerRequiredMixin(LoginRequiredMixin):
 
 
 class NoteCreateView(LoginRequiredMixin, CreateView):
-    """Criação de nota para um paper"""
     model = Note
     form_class = NoteForm
     template_name = 'notes/form.html'
@@ -41,7 +38,6 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('paper_detail', kwargs={'pk': self.object.paper.pk})
 
 class NoteUpdateView(LoginRequiredMixin, UpdateView):
-    """Edição de nota"""
     model = Note
     form_class = NoteForm
     template_name = 'notes/form.html'
@@ -50,7 +46,6 @@ class NoteUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('paper_detail', kwargs={'pk': self.object.paper.pk})
 
 class NoteDeleteView(LoginRequiredMixin, DeleteView):
-    """Exclusão de nota"""
     model = Note
     template_name = 'notes/confirm_delete.html'
     

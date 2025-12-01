@@ -1,14 +1,4 @@
-"""
-Forms do SRPIA
-
-Estrutura modularizada por domínio:
-- paper.py: PaperForm
-- note.py: NoteForm
-- reading_session.py: ReadingSessionForm
-- experiment.py: ExperimentForm
-- tag.py: TagForm
-- paper_search.py: PaperSearchForm
-"""
+"""Formulários do SRPIA"""
 
 from .paper import PaperForm
 from .note import NoteForm

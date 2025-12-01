@@ -1,6 +1,3 @@
-"""
-Formulários para o sistema de papers
-"""
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -10,8 +7,6 @@ from core.models import Paper, Note, ReadingSession, Experiment, Tag, Author
 
 
 class ExperimentForm(forms.ModelForm):
-    """Formulário para criação e edição de experimentos"""
-    
     class Meta:
         model = Experiment
         fields = ['title', 'description', 'dataset_description', 'main_results', 'status', 'code_repository_url', 'papers']

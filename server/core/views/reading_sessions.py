@@ -18,8 +18,6 @@ from ..services import RankingService
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
-    """Mixin para garantir que apenas o owner acessa o objeto"""
-    
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
 
@@ -27,7 +25,6 @@ class OwnerRequiredMixin(LoginRequiredMixin):
 
 
 class ReadingSessionCreateView(LoginRequiredMixin, CreateView):
-    """Registro de sessão de leitura"""
     model = ReadingSession
     form_class = ReadingSessionForm
     template_name = 'sessions/form.html'
@@ -41,7 +38,6 @@ class ReadingSessionCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('paper_detail', kwargs={'pk': self.object.paper.pk})
 
 class ReadingSessionDeleteView(LoginRequiredMixin, DeleteView):
-    """Exclusão de sessão de leitura"""
     model = ReadingSession
     template_name = 'sessions/confirm_delete.html'
     

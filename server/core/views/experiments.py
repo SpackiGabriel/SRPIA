@@ -18,8 +18,6 @@ from ..services import RankingService
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
-    """Mixin para garantir que apenas o owner acessa o objeto"""
-    
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
 
@@ -27,7 +25,6 @@ class OwnerRequiredMixin(LoginRequiredMixin):
 
 
 class ExperimentListView(LoginRequiredMixin, ListView):
-    """Lista de experimentos"""
     model = Experiment
     template_name = 'experiments/list.html'
     context_object_name = 'experiments'
@@ -37,13 +34,11 @@ class ExperimentListView(LoginRequiredMixin, ListView):
         return Experiment.objects.filter(owner=self.request.user)
 
 class ExperimentDetailView(OwnerRequiredMixin, DetailView):
-    """Detalhes de um experimento"""
     model = Experiment
     template_name = 'experiments/detail.html'
     context_object_name = 'experiment'
 
 class ExperimentCreateView(LoginRequiredMixin, CreateView):
-    """Criação de experimento"""
     model = Experiment
     form_class = ExperimentForm
     template_name = 'experiments/form.html'
@@ -59,7 +54,6 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class ExperimentUpdateView(OwnerRequiredMixin, UpdateView):
-    """Edição de experimento"""
     model = Experiment
     form_class = ExperimentForm
     template_name = 'experiments/form.html'
@@ -70,7 +64,6 @@ class ExperimentUpdateView(OwnerRequiredMixin, UpdateView):
         return kwargs
 
 class ExperimentDeleteView(OwnerRequiredMixin, DeleteView):
-    """Exclusão de experimento"""
     model = Experiment
     template_name = 'experiments/confirm_delete.html'
     success_url = reverse_lazy('experiment_list')

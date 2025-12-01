@@ -18,8 +18,6 @@ from ..services import RankingService
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
-    """Mixin para garantir que apenas o owner acessa o objeto"""
-    
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
 
@@ -27,7 +25,6 @@ class OwnerRequiredMixin(LoginRequiredMixin):
 
 
 class TagListView(LoginRequiredMixin, ListView):
-    """Lista de tags"""
     model = Tag
     template_name = 'tags/list.html'
     context_object_name = 'tags'
@@ -36,7 +33,6 @@ class TagListView(LoginRequiredMixin, ListView):
         return Tag.objects.filter(owner=self.request.user)
 
 class TagCreateView(LoginRequiredMixin, CreateView):
-    """Criação de tag"""
     model = Tag
     form_class = TagForm
     template_name = 'tags/form.html'
@@ -47,7 +43,6 @@ class TagCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class TagDeleteView(OwnerRequiredMixin, DeleteView):
-    """Exclusão de tag"""
     model = Tag
     template_name = 'tags/confirm_delete.html'
     success_url = reverse_lazy('tag_list')

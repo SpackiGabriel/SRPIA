@@ -1,14 +1,9 @@
-"""
-Formulários para autenticação e gerenciamento de usuários.
-"""
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
 class UserRegistrationForm(UserCreationForm):
-    """Formulário para registro de novos usuários"""
-    
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control'})

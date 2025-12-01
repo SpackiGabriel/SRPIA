@@ -7,14 +7,12 @@ from core.services import RankingService
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
-    """Dashboard principal com progresso e próximos papers recomendados"""
     template_name = 'dashboard.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         
-        # Estatísticas gerais
         total_papers = Paper.objects.filter(owner=user).count()
         papers_nao_iniciados = Paper.objects.filter(
             owner=user, status=Paper.STATUS_NAO_INICIADO

@@ -1,6 +1,3 @@
-"""
-URLs do app core
-"""
 from django.urls import path
 from . import views
 
