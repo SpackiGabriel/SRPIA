@@ -15,14 +15,14 @@ class PaperSearchForm(forms.Form):
     priority = forms.ChoiceField(
         label='Prioridade',
         required=False,
-        choices=[('', 'Todas')] + Paper.PRIORITY_CHOICES,
+        choices=[('', 'Todas')] + Paper.Priority.choices,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     
     status = forms.ChoiceField(
         label='Status',
         required=False,
-        choices=[('', 'Todos')] + Paper.STATUS_CHOICES,
+        choices=[('', 'Todos')] + Paper.Status.choices,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     

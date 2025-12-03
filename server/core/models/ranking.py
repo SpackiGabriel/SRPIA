@@ -4,7 +4,6 @@ from .paper import Paper
 
 
 class RankingEntry(models.Model):
-    """Entrada de ranking para controle de recomendações"""
     paper = models.OneToOneField(
         Paper,
         on_delete=models.CASCADE,

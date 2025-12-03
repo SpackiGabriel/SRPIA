@@ -7,31 +7,18 @@ from .tag import Tag
 
 
 class Paper(models.Model):
-    """Paper acadêmico de IA"""
     
-    PRIORITY_BAIXA = 'BAIXA'
-    PRIORITY_MEDIA = 'MEDIA'
-    PRIORITY_ALTA = 'ALTA'
-    PRIORITY_URGENTE = 'URGENTE'
+    class Priority(models.TextChoices):
+        BAIXA = 'BAIXA', 'Baixa'
+        MEDIA = 'MEDIA', 'Média'
+        ALTA = 'ALTA', 'Alta'
+        URGENTE = 'URGENTE', 'Urgente'
     
-    PRIORITY_CHOICES = [
-        (PRIORITY_BAIXA, 'Baixa'),
-        (PRIORITY_MEDIA, 'Média'),
-        (PRIORITY_ALTA, 'Alta'),
-        (PRIORITY_URGENTE, 'Urgente'),
-    ]
-    
-    STATUS_NAO_INICIADO = 'NAO_INICIADO'
-    STATUS_EM_LEITURA = 'EM_LEITURA'
-    STATUS_LIDO = 'LIDO'
-    STATUS_REVISANDO = 'REVISANDO'
-    
-    STATUS_CHOICES = [
-        (STATUS_NAO_INICIADO, 'Não iniciado'),
-        (STATUS_EM_LEITURA, 'Em leitura'),
-        (STATUS_LIDO, 'Lido'),
-        (STATUS_REVISANDO, 'Revisando'),
-    ]
+    class Status(models.TextChoices):
+        NAO_INICIADO = 'NAO_INICIADO', 'Não iniciado'
+        EM_LEITURA = 'EM_LEITURA', 'Em leitura'
+        LIDO = 'LIDO', 'Lido'
+        REVISANDO = 'REVISANDO', 'Revisando'
 
     title = models.CharField('Título', max_length=500)
     abstract = models.TextField('Resumo', blank=True)
@@ -55,14 +42,14 @@ class Paper(models.Model):
     priority = models.CharField(
         'Prioridade',
         max_length=10,
-        choices=PRIORITY_CHOICES,
-        default=PRIORITY_MEDIA
+        choices=Priority.choices,
+        default=Priority.MEDIA
     )
     status = models.CharField(
         'Status',
         max_length=15,
-        choices=STATUS_CHOICES,
-        default=STATUS_NAO_INICIADO
+        choices=Status.choices,
+        default=Status.NAO_INICIADO
     )
     progress_percent = models.PositiveIntegerField(
         'Progresso (%)',
@@ -105,17 +92,17 @@ class Paper(models.Model):
     def priority_score(self):
         """Retorna o score base da prioridade para cálculo de ranking"""
         scores = {
-            self.PRIORITY_URGENTE: 100,
-            self.PRIORITY_ALTA: 70,
-            self.PRIORITY_MEDIA: 40,
-            self.PRIORITY_BAIXA: 10,
+            self.Priority.URGENTE: 100,
+            self.Priority.ALTA: 70,
+            self.Priority.MEDIA: 40,
+            self.Priority.BAIXA: 10,
         }
         return scores.get(self.priority, 0)
 
     @property
     def is_completed(self):
         """Verifica se o paper foi completamente lido"""
-        return self.status == self.STATUS_LIDO
+        return self.status == self.Status.LIDO
 
     @property
     def total_reading_time(self):

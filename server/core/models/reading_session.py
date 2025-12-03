@@ -6,7 +6,6 @@ from .paper import Paper
 
 
 class ReadingSession(models.Model):
-    """Sessão de leitura de um paper"""
     paper = models.ForeignKey(
         Paper,
         on_delete=models.CASCADE,

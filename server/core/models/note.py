@@ -4,8 +4,6 @@ from .paper import Paper
 
 
 class Note(models.Model):
-    """Nota/anotação sobre um paper"""
-    
     TYPE_INSIGHT = 'INSIGHT'
     TYPE_CRITICA = 'CRITICA'
     TYPE_DUVIDA = 'DUVIDA'

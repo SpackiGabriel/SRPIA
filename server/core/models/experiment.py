@@ -5,19 +5,12 @@ from .paper import Paper
 
 
 class Experiment(models.Model):
-    """Experimento relacionado a papers"""
     
-    STATUS_PLANEJADO = 'PLANEJADO'
-    STATUS_EM_EXECUCAO = 'EM_EXECUCAO'
-    STATUS_CONCLUIDO = 'CONCLUIDO'
-    STATUS_ABORTADO = 'ABORTADO'
-    
-    STATUS_CHOICES = [
-        (STATUS_PLANEJADO, 'Planejado'),
-        (STATUS_EM_EXECUCAO, 'Em execução'),
-        (STATUS_CONCLUIDO, 'Concluído'),
-        (STATUS_ABORTADO, 'Abortado'),
-    ]
+    class Status(models.TextChoices):
+        PLANEJADO = 'PLANEJADO', 'Planejado'
+        EM_EXECUCAO = 'EM_EXECUCAO', 'Em execução'
+        CONCLUIDO = 'CONCLUIDO', 'Concluído'
+        ABORTADO = 'ABORTADO', 'Abortado'
 
     title = models.CharField('Título', max_length=200)
     description = models.TextField('Descrição')
@@ -26,8 +19,8 @@ class Experiment(models.Model):
     status = models.CharField(
         'Status',
         max_length=15,
-        choices=STATUS_CHOICES,
-        default=STATUS_PLANEJADO
+        choices=Status.choices,
+        default=Status.PLANEJADO
     )
     main_results = models.TextField('Principais resultados', blank=True)
     

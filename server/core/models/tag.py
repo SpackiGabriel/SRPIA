@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 
 class Tag(models.Model):
-    """Tag temática para categorização de papers"""
     name = models.CharField('Nome', max_length=100)
     owner = models.ForeignKey(
         User,
