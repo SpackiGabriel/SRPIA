@@ -31,7 +31,41 @@ class PaperListView(LoginRequiredMixin, ListView):
     paginate_by = 20
     
     def get_queryset(self):
-        return Paper.objects.filter(owner=self.request.user)
+        queryset = Paper.objects.filter(owner=self.request.user)
+        
+        form = PaperSearchForm(self.request.GET, user=self.request.user)
+        
+        if form.is_valid():
+            q = form.cleaned_data.get('q')
+            if q:
+                queryset = queryset.filter(
+                    Q(title__icontains=q) |
+                    Q(abstract__icontains=q) |
+                    Q(authors__name__icontains=q)
+                ).distinct()
+            
+            priority = form.cleaned_data.get('priority')
+            if priority:
+                queryset = queryset.filter(priority=priority)
+            
+            status = form.cleaned_data.get('status')
+            if status:
+                queryset = queryset.filter(status=status)
+
+            tag = form.cleaned_data.get('tag')
+            if tag:
+                queryset = queryset.filter(tags=tag)
+
+            year = form.cleaned_data.get('year')
+            if year:
+                queryset = queryset.filter(year=year)
+        
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = PaperSearchForm(self.request.GET, user=self.request.user)
+        return context
 
 class PaperDetailView(OwnerRequiredMixin, DetailView):
     model = Paper
