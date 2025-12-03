@@ -4,19 +4,13 @@ from .paper import Paper
 
 
 class Note(models.Model):
-    TYPE_INSIGHT = 'INSIGHT'
-    TYPE_CRITICA = 'CRITICA'
-    TYPE_DUVIDA = 'DUVIDA'
-    TYPE_CITACAO = 'CITACAO'
-    TYPE_OUTRO = 'OUTRO'
     
-    TYPE_CHOICES = [
-        (TYPE_INSIGHT, 'Insight'),
-        (TYPE_CRITICA, 'Crítica'),
-        (TYPE_DUVIDA, 'Dúvida'),
-        (TYPE_CITACAO, 'Citação'),
-        (TYPE_OUTRO, 'Outro'),
-    ]
+    class Type(models.TextChoices):
+        INSIGHT = 'INSIGHT', 'Insight'
+        CRITICA = 'CRITICA', 'Crítica'
+        DUVIDA = 'DUVIDA', 'Dúvida'
+        CITACAO = 'CITACAO', 'Citação'
+        OUTRO = 'OUTRO', 'Outro'
 
     paper = models.ForeignKey(
         Paper,
@@ -29,8 +23,8 @@ class Note(models.Model):
     note_type = models.CharField(
         'Tipo',
         max_length=10,
-        choices=TYPE_CHOICES,
-        default=TYPE_OUTRO
+        choices=Type.choices,
+        default=Type.OUTRO
     )
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
     updated_at = models.DateTimeField('Atualizado em', auto_now=True)

@@ -214,37 +214,37 @@ class Command(BaseCommand):
                 "paper": papers[1],
                 "title": "Arquitetura ResNet - Conexões Residuais",
                 "content": "A inovação principal é o uso de conexões residuais (skip connections) que permitem treinar redes muito mais profundas. Isso resolve o problema de degradação que ocorre em redes profundas convencionais. As conexões residuais facilitam o fluxo do gradiente durante o backpropagation.",
-                "note_type": Note.TYPE_INSIGHT,
+                "note_type": Note.Type.INSIGHT,
             },
             {
                 "paper": papers[1],
                 "title": "Aplicação em Transfer Learning",
                 "content": "ResNet pré-treinada no ImageNet serve como excelente feature extractor para outras tarefas de visão computacional.",
-                "note_type": Note.TYPE_INSIGHT,
+                "note_type": Note.Type.INSIGHT,
             },
             {
                 "paper": papers[2],
                 "title": "Aplicações Práticas de GANs",
                 "content": "GANs podem ser usadas para: geração de imagens realistas, super-resolução, transferência de estilo, data augmentation, geração de dados sintéticos para treinamento.",
-                "note_type": Note.TYPE_INSIGHT,
+                "note_type": Note.Type.INSIGHT,
             },
             {
                 "paper": papers[2],
                 "title": "Dificuldade de Treinamento",
                 "content": "O treinamento de GANs é notoriamente instável. Mode collapse e vanishing gradients são problemas comuns. Requer muito tuning de hiperparâmetros.",
-                "note_type": Note.TYPE_CRITICA,
+                "note_type": Note.Type.CRITICA,
             },
             {
                 "paper": papers[3],
                 "title": "Dúvida sobre Fine-tuning",
                 "content": "Como determinar a melhor taxa de aprendizado para fine-tuning em tarefas específicas? Preciso investigar estratégias de learning rate scheduling.",
-                "note_type": Note.TYPE_DUVIDA,
+                "note_type": Note.Type.DUVIDA,
             },
             {
                 "paper": papers[3],
                 "title": "Citação Importante",
                 "content": "\"BERT obtains new state-of-the-art results on eleven natural language processing tasks\" - isso demonstra a versatilidade do modelo.",
-                "note_type": Note.TYPE_CITACAO,
+                "note_type": Note.Type.CITACAO,
             },
         ]
 
@@ -318,7 +318,7 @@ class Command(BaseCommand):
             {
                 "title": "Classificação de Imagens CIFAR-10 com ResNet",
                 "description": "Experimento para classificar imagens do dataset CIFAR-10 usando ResNet-50 pré-treinada no ImageNet. Objetivo: alcançar acurácia superior a 90%.",
-                "status": Experiment.STATUS_CONCLUIDO,
+                "status": Experiment.Status.CONCLUIDO,
                 "dataset_description": "CIFAR-10: 60.000 imagens coloridas 32x32 em 10 classes (50.000 para treino, 10.000 para teste)",
                 "main_results": "Acurácia final de 92,3% após 100 épocas. Taxa de aprendizado: 0,001 com decaimento. Aumento de dados aplicado (inversão horizontal, recorte aleatório).",
                 "code_repository_url": "https://github.com/demo/resnet-cifar10",
@@ -327,7 +327,7 @@ class Command(BaseCommand):
             {
                 "title": "Geração de Faces com GAN",
                 "description": "Implementação de DCGAN para geração de faces humanas realistas usando o dataset CelebA.",
-                "status": Experiment.STATUS_EM_EXECUCAO,
+                "status": Experiment.Status.EM_EXECUCAO,
                 "dataset_description": "CelebA: mais de 200 mil imagens de celebridades, redimensionadas para 64x64 pixels",
                 "main_results": "Após 50 épocas, as faces geradas começam a ter características realistas, mas ainda há problemas com colapso de modo (mode collapse) em alguns casos.",
                 "code_repository_url": "https://github.com/demo/dcgan-faces",
@@ -336,7 +336,7 @@ class Command(BaseCommand):
             {
                 "title": "Análise de Sentimento com BERT Fine-tuning",
                 "description": "Ajuste fino (fine-tuning) do BERT para análise de sentimento em avaliações de filmes do dataset IMDb.",
-                "status": Experiment.STATUS_PLANEJADO,
+                "status": Experiment.Status.PLANEJADO,
                 "dataset_description": "IMDb: 50 mil avaliações de filmes (25 mil positivas, 25 mil negativas)",
                 "main_results": "Esperamos alcançar F1-score superior a 0,90",
                 "code_repository_url": "https://github.com/demo/bert-sentiment",
