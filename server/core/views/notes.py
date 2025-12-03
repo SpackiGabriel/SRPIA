@@ -29,9 +29,15 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
     form_class = NoteForm
     template_name = 'notes/form.html'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['paper'] = get_object_or_404(Paper, pk=self.kwargs['paper_pk'], owner=self.request.user)
+        return context
+    
     def form_valid(self, form):
-        paper = get_object_or_404(Paper, pk=self.kwargs['paper_pk'])
+        paper = get_object_or_404(Paper, pk=self.kwargs['paper_pk'], owner=self.request.user)
         form.instance.paper = paper
+        messages.success(self.request, 'Nota criada com sucesso!')
         return super().form_valid(form)
     
     def get_success_url(self):
@@ -42,12 +48,36 @@ class NoteUpdateView(LoginRequiredMixin, UpdateView):
     form_class = NoteForm
     template_name = 'notes/form.html'
     
+    def get_queryset(self):
+        return Note.objects.filter(paper__owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['paper'] = self.object.paper
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Nota atualizada com sucesso!')
+        return super().form_valid(form)
+    
     def get_success_url(self):
         return reverse_lazy('paper_detail', kwargs={'pk': self.object.paper.pk})
 
 class NoteDeleteView(LoginRequiredMixin, DeleteView):
     model = Note
     template_name = 'notes/confirm_delete.html'
+    
+    def get_queryset(self):
+        return Note.objects.filter(paper__owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['paper'] = self.object.paper
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Nota excluída com sucesso!')
+        return super().form_valid(form)
     
     def get_success_url(self):
         return reverse_lazy('paper_detail', kwargs={'pk': self.object.paper.pk})
