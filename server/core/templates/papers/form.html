@@ -133,6 +133,17 @@
                                 </span>
                                 {% endif %}
                             </div>
+
+                            <!-- Total Pages -->
+                            <div class="form-group">
+                                <label class="form-label" for="id_total_pages">{{ form.total_pages.label }}</label>
+                                {{ form.total_pages }}
+                                {% if form.total_pages.errors %}
+                                <span class="form-error">{{ form.total_pages.errors.0 }}</span>
+                                {% else %}
+                                <span class="form-help">Número total de páginas do paper (usado para calcular o progresso de leitura)</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
 

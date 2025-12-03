@@ -18,6 +18,11 @@ class ReadingSession(models.Model):
         'Duração (minutos)',
         validators=[MinValueValidator(1)]
     )
+    pages_read = models.PositiveIntegerField(
+        'Páginas lidas',
+        default=0,
+        validators=[MinValueValidator(0)]
+    )
     quick_notes = models.TextField('Notas rápidas', blank=True)
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
 

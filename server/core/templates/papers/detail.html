@@ -138,13 +138,18 @@
                     </div>
                     
                     <div style="margin-bottom: var(--space-4);">
-                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Progresso</p>
-                        <div style="display: flex; align-items: center; gap: var(--space-2);">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Progresso de Leitura</p>
+                        <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2);">
                             <div class="progress-bar-container" style="flex: 1;">
                                 <div class="progress-bar-fill" style="--progress-width: {{ paper.progress_percent }}%; width: var(--progress-width);"></div>
                             </div>
                             <span class="text-xs text-secondary" style="font-weight: var(--font-weight-medium);">{{ paper.progress_percent }}%</span>
                         </div>
+                        {% if paper.total_pages %}
+                        <p class="text-xs text-secondary" style="margin: 0;">
+                            <i class="bi bi-book"></i> {{ paper.total_pages_read }} de {{ paper.total_pages }} páginas lidas
+                        </p>
+                        {% endif %}
                     </div>
                     
                     <div>
@@ -252,6 +257,7 @@
                         <tr>
                             <th>Data</th>
                             <th>Duração</th>
+                            <th>Páginas Lidas</th>
                             <th>Notas Rápidas</th>
                             <th style="width: 100px;"></th>
                         </tr>
@@ -261,6 +267,9 @@
                         <tr>
                             <td class="text-sm">{{ session.date|date:"d/m/Y" }}</td>
                             <td class="text-sm">{{ session.duration_minutes }} min</td>
+                            <td class="text-sm">
+                                <span class="badge badge-primary">{{ session.pages_read }} pág{{ session.pages_read|pluralize:"s" }}</span>
+                            </td>
                             <td class="text-sm text-secondary">{{ session.quick_notes|truncatewords:10 }}</td>
                             <td>
                                 <a href="{% url 'session_delete' session.pk %}" class="btn btn-ghost btn-sm" style="color: var(--color-danger-600);">

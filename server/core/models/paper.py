@@ -45,6 +45,12 @@ class Paper(models.Model):
     doi = models.CharField('DOI', max_length=200, blank=True)
     url = models.URLField('URL', blank=True)
     pdf_file = models.FileField('Arquivo PDF', upload_to='papers/', blank=True, null=True)
+    total_pages = models.PositiveIntegerField(
+        'Total de Páginas',
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)]
+    )
     
     priority = models.CharField(
         'Prioridade',
@@ -117,3 +123,19 @@ class Paper(models.Model):
         return self.reading_sessions.aggregate(
             total=models.Sum('duration_minutes')
         )['total'] or 0
+    
+    @property
+    def total_pages_read(self):
+        """Retorna o total de páginas lidas em todas as sessões"""
+        return self.reading_sessions.aggregate(
+            total=models.Sum('pages_read')
+        )['total'] or 0
+    
+    def update_progress(self):
+        """Atualiza o progresso de leitura baseado nas páginas lidas"""
+        if self.total_pages and self.total_pages > 0:
+            pages_read = self.total_pages_read
+            self.progress_percent = min(100, int((pages_read / self.total_pages) * 100))
+        else:
+            self.progress_percent = 0
+        self.save(update_fields=['progress_percent'])

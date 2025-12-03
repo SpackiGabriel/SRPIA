@@ -20,15 +20,16 @@ class PaperForm(forms.ModelForm):
     
     class Meta:
         model = Paper
-        fields = ['title', 'abstract', 'year', 'venue', 'doi', 'url', 'pdf_file', 'tags', 'priority', 'status']
+        fields = ['title', 'abstract', 'year', 'venue', 'doi', 'url', 'pdf_file', 'total_pages', 'tags', 'priority', 'status']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'abstract': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'year': forms.NumberInput(attrs={'class': 'form-control'}),
+            'year': forms.NumberInput(attrs={'class': 'form-control', 'min': 1900, 'max': 2100}),
             'venue': forms.TextInput(attrs={'class': 'form-control'}),
             'doi': forms.TextInput(attrs={'class': 'form-control'}),
             'url': forms.URLInput(attrs={'class': 'form-control'}),
             'pdf_file': forms.FileInput(attrs={'class': 'form-control'}),
+            'total_pages': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'placeholder': 'Ex: 12'}),
             'tags': forms.CheckboxSelectMultiple(),
             'priority': forms.Select(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-control'}),

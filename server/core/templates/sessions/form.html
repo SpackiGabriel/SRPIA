@@ -13,7 +13,7 @@
             </h1>
             <p class="page-subtitle">Registre suas sessões de leitura e acompanhe seu progresso</p>
         </div>
-        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-ghost">
+        <a href="{% url 'paper_detail' paper.pk %}" class="btn btn-ghost">
             <i class="bi bi-arrow-left"></i>
             Voltar
         </a>
@@ -28,8 +28,8 @@
             
             <div class="card">
                 <div class="card-body" style="display: flex; flex-direction: column; gap: var(--space-5);">
-                    <!-- Date and Duration -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5);">
+                    <!-- Date, Duration, and Pages -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-5);">
                         <!-- Date -->
                         <div class="form-group">
                             <label class="form-label" for="id_date">
@@ -55,6 +55,20 @@
                             <span class="form-help">Duração em minutos</span>
                             {% endif %}
                         </div>
+
+                        <!-- Pages Read -->
+                        <div class="form-group">
+                            <label class="form-label" for="id_pages_read">
+                                {{ form.pages_read.label }}
+                                <span style="color: var(--color-danger-600);">*</span>
+                            </label>
+                            {{ form.pages_read }}
+                            {% if form.pages_read.errors %}
+                            <span class="form-error">{{ form.pages_read.errors.0 }}</span>
+                            {% else %}
+                            <span class="form-help">Páginas lidas{% if paper.total_pages %} (Total: {{ paper.total_pages }}){% endif %}</span>
+                            {% endif %}
+                        </div>
                     </div>
 
                     <!-- Notes -->
@@ -67,18 +81,6 @@
                         <span class="form-help">Observações sobre esta sessão de leitura</span>
                         {% endif %}
                     </div>
-
-                    <!-- Paper -->
-                    <div class="form-group">
-                        <label class="form-label" for="id_paper">
-                            {{ form.paper.label }}
-                            <span style="color: var(--color-danger-600);">*</span>
-                        </label>
-                        {{ form.paper }}
-                        {% if form.paper.errors %}
-                        <span class="form-error">{{ form.paper.errors.0 }}</span>
-                        {% endif %}
-                    </div>
                 </div>
 
                 <!-- Form Actions -->
@@ -87,7 +89,7 @@
                         <i class="bi bi-info-circle"></i> Campos com * são obrigatórios
                     </span>
                     <div style="display: flex; gap: var(--space-3);">
-                        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-secondary">
+                        <a href="{% url 'paper_detail' paper.pk %}" class="btn btn-secondary">
                             <i class="bi bi-x-circle"></i>
                             Cancelar
                         </a>

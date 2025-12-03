@@ -75,7 +75,7 @@ class PaperDetailView(OwnerRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['notes'] = self.object.notes.all().order_by('-created_at')
-        context['reading_sessions'] = self.object.reading_sessions.all().order_by('-date')
+        context['sessions'] = self.object.reading_sessions.all().order_by('-date')
         return context
 
 class PaperCreateView(LoginRequiredMixin, CreateView):
