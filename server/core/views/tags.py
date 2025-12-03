@@ -30,7 +30,9 @@ class TagListView(LoginRequiredMixin, ListView):
     context_object_name = 'tags'
     
     def get_queryset(self):
-        return Tag.objects.filter(owner=self.request.user)
+        return Tag.objects.filter(owner=self.request.user).annotate(
+            paper_count=Count('papers')
+        )
 
 class TagCreateView(LoginRequiredMixin, CreateView):
     model = Tag

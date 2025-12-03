@@ -2,6 +2,14 @@
 
 {% block title %}Tags - SRPIA{% endblock %}
 
+{% block extra_css %}
+<style>
+.tag-paper-count-link:hover .tag-paper-count-box {
+    background: var(--color-primary-50) !important;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">
@@ -46,6 +54,18 @@
                 </div>
 
                 <!-- Papers Count -->
+                {% if tag.paper_count > 0 %}
+                <a href="{% url 'paper_list' %}?tag={{ tag.id }}" class="tag-paper-count-link" style="text-decoration: none; display: block;">
+                    <div class="tag-paper-count-box" style="padding: var(--space-3); background: var(--surface-hover); border-radius: var(--radius-md); text-align: center; cursor: pointer; transition: background 0.2s;">
+                        <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">
+                            Papers com esta tag
+                        </p>
+                        <p class="display-sm" style="margin: 0; color: var(--color-primary-600);">
+                            {{ tag.paper_count }}
+                        </p>
+                    </div>
+                </a>
+                {% else %}
                 <div style="padding: var(--space-3); background: var(--surface-hover); border-radius: var(--radius-md); text-align: center;">
                     <p class="text-xs text-tertiary" style="margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em;">
                         Papers com esta tag
@@ -54,6 +74,7 @@
                         {{ tag.paper_count }}
                     </p>
                 </div>
+                {% endif %}
 
                 <!-- Actions -->
                 <div style="display: flex; gap: var(--space-2);">
