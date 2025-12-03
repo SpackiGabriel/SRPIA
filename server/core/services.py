@@ -18,9 +18,9 @@ class RankingService:
         score = paper.priority_score
         
         # Status
-        if paper.status == Paper.STATUS_LIDO:
+        if paper.status == Paper.Status.LIDO:
             score += cls.PENALTY_LIDO
-        elif paper.status == Paper.STATUS_REVISANDO:
+        elif paper.status == Paper.Status.REVISANDO:
             score += cls.PENALTY_REVISANDO
         
         # Novidade

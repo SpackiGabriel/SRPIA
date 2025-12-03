@@ -15,16 +15,16 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         
         total_papers = Paper.objects.filter(owner=user).count()
         papers_nao_iniciados = Paper.objects.filter(
-            owner=user, status=Paper.STATUS_NAO_INICIADO
+            owner=user, status=Paper.Status.NAO_INICIADO
         ).count()
         papers_em_leitura = Paper.objects.filter(
-            owner=user, status=Paper.STATUS_EM_LEITURA
+            owner=user, status=Paper.Status.EM_LEITURA
         ).count()
         papers_lidos = Paper.objects.filter(
-            owner=user, status=Paper.STATUS_LIDO
+            owner=user, status=Paper.Status.LIDO
         ).count()
         papers_revisando = Paper.objects.filter(
-            owner=user, status=Paper.STATUS_REVISANDO
+            owner=user, status=Paper.Status.REVISANDO
         ).count()
         
         # Próximos papers recomendados
