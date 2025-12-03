@@ -7,6 +7,12 @@
 .tag-paper-count-link:hover .tag-paper-count-box {
     background: var(--color-primary-50) !important;
 }
+
+@media (max-width: 768px) {
+    .grid-cols-3 {
+        grid-template-columns: 1fr !important;
+    }
+}
 </style>
 {% endblock %}
 
@@ -221,14 +227,4 @@
     </div>
 </div>
 {% endif %}
-{% endblock %}
-
-{% block extra_css %}
-<style>
-    @media (max-width: 768px) {
-        .grid-cols-3 {
-            grid-template-columns: 1fr !important;
-        }
-    }
-</style>
 {% endblock %}
