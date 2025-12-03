@@ -1,4 +1,3 @@
-"""Comando para popular o banco com dados de demonstração"""
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -39,7 +38,6 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('='*70))
         self.stdout.write('')
 
-        # Criar/obter usuário
         user, created = User.objects.get_or_create(
             username=username,
             defaults={'email': f'{username}@example.com'}
@@ -51,7 +49,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'✓ Usuário "{username}" criado'))
         else:
             if clear_data:
-                # Limpar dados existentes
                 Paper.objects.filter(owner=user).delete()
                 Tag.objects.filter(owner=user).delete()
                 Experiment.objects.filter(owner=user).delete()
@@ -59,7 +56,6 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.WARNING(f'⚠ Usuário "{username}" já existe (use --clear para limpar dados)'))
 
-        # Criar autores
         self.stdout.write('')
         self.stdout.write('Criando autores...')
         authors_data = [
@@ -79,7 +75,6 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(f'  ✓ {author.name}')
 
-        # Criar tags
         self.stdout.write('')
         self.stdout.write('Criando tags...')
         tags_data = [
@@ -101,7 +96,6 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(f'  ✓ {tag_name}')
 
-        # Criar papers
         self.stdout.write('')
         self.stdout.write('Criando papers...')
         papers_data = [
@@ -111,6 +105,7 @@ class Command(BaseCommand):
                 "year": 2017,
                 "venue": "NeurIPS 2017",
                 "doi": "10.48550/arXiv.1706.03762",
+                "total_pages": 15,
                 "priority": Paper.PRIORITY_URGENTE,
                 "status": Paper.STATUS_NAO_INICIADO,
                 "author_indices": [0, 1],
@@ -122,6 +117,7 @@ class Command(BaseCommand):
                 "year": 2016,
                 "venue": "CVPR 2016",
                 "doi": "10.1109/CVPR.2016.90",
+                "total_pages": 12,
                 "priority": Paper.PRIORITY_ALTA,
                 "status": Paper.STATUS_EM_LEITURA,
                 "author_indices": [2, 6],
@@ -133,6 +129,7 @@ class Command(BaseCommand):
                 "year": 2014,
                 "venue": "NeurIPS 2014",
                 "doi": "10.48550/arXiv.1406.2661",
+                "total_pages": 9,
                 "priority": Paper.PRIORITY_ALTA,
                 "status": Paper.STATUS_LIDO,
                 "author_indices": [4],
@@ -144,6 +141,7 @@ class Command(BaseCommand):
                 "year": 2019,
                 "venue": "NAACL 2019",
                 "doi": "10.18653/v1/N19-1423",
+                "total_pages": 16,
                 "priority": Paper.PRIORITY_URGENTE,
                 "status": Paper.STATUS_EM_LEITURA,
                 "author_indices": [0, 1],
@@ -155,6 +153,7 @@ class Command(BaseCommand):
                 "year": 2013,
                 "venue": "NeurIPS 2013 Workshop",
                 "doi": "10.48550/arXiv.1312.5602",
+                "total_pages": 9,
                 "priority": Paper.PRIORITY_MEDIA,
                 "status": Paper.STATUS_NAO_INICIADO,
                 "author_indices": [3, 5],
@@ -166,6 +165,7 @@ class Command(BaseCommand):
                 "year": 2012,
                 "venue": "NeurIPS 2012",
                 "doi": "10.1145/3065386",
+                "total_pages": 9,
                 "priority": Paper.PRIORITY_MEDIA,
                 "status": Paper.STATUS_LIDO,
                 "author_indices": [1, 2],
@@ -177,6 +177,7 @@ class Command(BaseCommand):
                 "year": 2016,
                 "venue": "Nature",
                 "doi": "10.1038/nature16961",
+                "total_pages": 7,
                 "priority": Paper.PRIORITY_BAIXA,
                 "status": Paper.STATUS_NAO_INICIADO,
                 "author_indices": [5],
@@ -259,36 +260,42 @@ class Command(BaseCommand):
                 "paper": papers[1],
                 "date": date.today() - timedelta(days=5),
                 "duration_minutes": 90,
+                "pages_read": 4,
                 "quick_notes": "Li a introdução e método. Arquitetura interessante com skip connections.",
             },
             {
                 "paper": papers[1],
                 "date": date.today() - timedelta(days=3),
                 "duration_minutes": 60,
+                "pages_read": 3,
                 "quick_notes": "Resultados experimentais impressionantes no ImageNet. Rede de 152 camadas!",
             },
             {
                 "paper": papers[1],
                 "date": date.today() - timedelta(days=1),
                 "duration_minutes": 75,
+                "pages_read": 5,
                 "quick_notes": "Análise dos experimentos de ablation. As conexões residuais são fundamentais.",
             },
             {
                 "paper": papers[3],
                 "date": date.today() - timedelta(days=2),
                 "duration_minutes": 120,
+                "pages_read": 8,
                 "quick_notes": "Estudei o processo de pré-treinamento do BERT com MLM e NSP.",
             },
             {
                 "paper": papers[3],
                 "date": date.today(),
                 "duration_minutes": 90,
+                "pages_read": 6,
                 "quick_notes": "Fine-tuning em tarefas downstream. Resultados impressionantes com minimal task-specific architecture.",
             },
             {
                 "paper": papers[5],
                 "date": date.today() - timedelta(days=7),
                 "duration_minutes": 45,
+                "pages_read": 9,
                 "quick_notes": "AlexNet foi revolucionário. ReLU e dropout foram inovações importantes.",
             },
         ]
@@ -297,6 +304,13 @@ class Command(BaseCommand):
             session, created = ReadingSession.objects.get_or_create(**session_data)
             if created:
                 self.stdout.write(f'  ✓ Sessão para "{session.paper.title[:40]}..."')
+
+        self.stdout.write('')
+        self.stdout.write('Atualizando progresso dos papers...')
+        for paper in papers:
+            if paper.reading_sessions.exists():
+                paper.update_progress()
+                self.stdout.write(f'  ✓ {paper.title[:50]}... - {paper.progress_percent}%')
 
         self.stdout.write('')
         self.stdout.write('Criando experimentos...')
@@ -345,7 +359,6 @@ class Command(BaseCommand):
                 
                 self.stdout.write(f'  ✓ {experiment.title}')
 
-        # Resumo final
         self.stdout.write('')
         self.stdout.write(self.style.SUCCESS('='*70))
         self.stdout.write(self.style.SUCCESS(' Dados criados com sucesso!'))

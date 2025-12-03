@@ -1,9 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from core.models import Paper, Note, ReadingSession, Experiment, Tag, Author
-
-
+from core.models import Paper, Tag
 
 
 class PaperSearchForm(forms.Form):
