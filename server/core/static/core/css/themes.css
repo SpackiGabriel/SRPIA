@@ -35,13 +35,18 @@
   --text-inverse: #0d1b2a;
   
   /* Adjust semantic colors for ocean theme */
-  --color-success-50: #064e3b;    /* Deep teal */
-  --color-warning-50: #451a03;    /* Keep warm for contrast */
-  --color-danger-50: #450a0a;     /* Keep warm for contrast */
+  --color-success-50: #064e3b;    /* Deep teal background */
+  --color-success-700: #6ee7b7;   /* Light green text for dark mode */
+  --color-warning-50: #451a03;    /* Dark orange background */
+  --color-warning-700: #fbbf24;   /* Bright yellow text for dark mode */
+  --color-danger-50: #7f1d1d;     /* Dark red background */
+  --color-danger-700: #fca5a5;    /* Light red text for dark mode */
   --color-primary-50: #1e3a8a;    /* Deep blue */
-  --color-primary-100: #1e40af;   /* Darker blue for backgrounds in dark theme */
+  --color-primary-100: #1e40af;   /* Darker blue for backgrounds */
+  --color-primary-700: #93c5fd;   /* Light blue text for dark mode */
   --color-neutral-50: #1b263b;
-  --color-neutral-100: #22304a;
+  --color-neutral-100: #374151;   /* Lighter neutral for better contrast */
+  --color-neutral-700: #d1d5db;   /* Light gray text for dark mode */
   
   /* Enhanced primary colors for ocean theme */
   --color-primary-600: #4a9eff;   /* Brighter blue for better contrast */
